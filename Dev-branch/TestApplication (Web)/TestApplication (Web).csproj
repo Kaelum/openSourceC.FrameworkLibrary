@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SampleWeb</RootNamespace>
+    <AssemblyName>SampleWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\base.css" />
+    <Content Include="App_Themes\default\default.css" />
+    <Content Include="App_Themes\default\images\CoffeeBean.png" />
+    <Content Include="App_Themes\default\images\gradient_blue.png" />
+    <Content Include="App_Themes\default\images\gradient_gray.gif" />
+    <Content Include="App_Themes\default\images\menu_background.png" />
+    <Content Include="App_Themes\default\images\menu_background_inverted.png" />
+    <Content Include="App_Themes\default\images\menu_hover.png" />
+    <Content Include="App_Themes\default\images\menu_hover_inverted.png" />
+    <Content Include="App_Themes\default\images\menu_selected.png" />
+    <Content Include="App_Themes\default\images\menu_selected_inverted.png" />
+    <Content Include="App_Themes\default\images\SantaFeStucco.png" />
+    <Content Include="App_Themes\default\images\SoapBubbles.png" />
+    <Content Include="App_Themes\default\images\spinner_medium.gif" />
+    <Content Include="App_Themes\default\images\Zapotec.png" />
+    <Content Include="App_Themes\default\RadSkins\RadDefault.css" />
+    <Content Include="App_Themes\default\RadSkins\RadDefault\spinner_medium.gif" />
+    <Content Include="App_Themes\error.css" />
+    <Content Include="App_Themes\ie.css" />
+    <Content Include="App_Themes\reset-fonts-grids.css" />
+    <Content Include="default.aspx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Common\openSourceC.FrameworkLibrary.Common.csproj">
+      <Project>{D5E60952-0F68-4676-A3B5-7BE1E61653E8}</Project>
+      <Name>openSourceC.FrameworkLibrary.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Data\openSourceC.FrameworkLibrary.Data.csproj">
+      <Project>{0F4CBEA2-D2A8-4AE8-8A42-A6302D036FF8}</Project>
+      <Name>openSourceC.FrameworkLibrary.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Design\openSourceC.FrameworkLibrary.Design.csproj">
+      <Project>{11BAA767-3C8F-46C8-AD15-EBDDB5F29F24}</Project>
+      <Name>openSourceC.FrameworkLibrary.Design</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Web\openSourceC.FrameworkLibrary.Web.csproj">
+      <Project>{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}</Project>
+      <Name>openSourceC.FrameworkLibrary.Web</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\default\default.skin" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

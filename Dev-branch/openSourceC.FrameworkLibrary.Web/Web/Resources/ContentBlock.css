@@ -1,0 +1,14 @@
+﻿div.osc-ContentBlock-col, div.osc-ContentBlock-exp
+{
+	background-image: url("<%=WebResource("openSourceC.FrameworkLibrary.Web.Resources.ExpandCollapse.png")%>");
+	overflow: hidden;
+	width: 9px;
+	height: 9px;
+	margin: 0;
+	padding: 0;
+}
+
+div.osc-ContentBlock-exp
+{
+	background-position: -9px 0;
+}
