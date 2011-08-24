@@ -1,0 +1,21 @@
+﻿/* IE-Only Stylesheet (loaded conditionally in web pages by using the following syntax)
+ *
+ * <!--[if IE 6]>
+ * Special instructions for IE 6 here
+ * <![endif]-->
+ *
+ * <!--[if lt IE 6]>
+ * Special instructions for pre-IE 6 browsers here
+ * <![endif]-->
+ *
+ * <!--[if gte IE 7]>
+ * Special instructions for IE 7 and greater browsers here
+ * <![endif]-->
+ */
+
+/* IE7 (and probably earlier versions) have a default 1px space above and below all input boxes
+   Here we use negative top and bottom margins to remove those spaces for all input elements */
+input[type=text]
+{
+	margin: -1px 0 -1px 0;
+}
