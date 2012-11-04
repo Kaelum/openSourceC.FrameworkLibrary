@@ -69,9 +69,9 @@
     <None Include="openSourceC.FrameworkLibrary.Windows.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Common\openSourceC.FrameworkLibrary.Common.csproj">
+    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Core\openSourceC.FrameworkLibrary.Core.csproj">
       <Project>{D5E60952-0F68-4676-A3B5-7BE1E61653E8}</Project>
-      <Name>openSourceC.FrameworkLibrary.Common</Name>
+      <Name>openSourceC.FrameworkLibrary.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

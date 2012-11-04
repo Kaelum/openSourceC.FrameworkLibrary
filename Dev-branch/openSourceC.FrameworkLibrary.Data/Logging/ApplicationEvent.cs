@@ -5,8 +5,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Xml.Serialization;
 
-using openSourceC.FrameworkLibrary.Common;
-
 namespace openSourceC.FrameworkLibrary.Data
 {
 	/// <summary>
@@ -83,14 +81,14 @@ namespace openSourceC.FrameworkLibrary.Data
 			{
 				WindowsIdentity windowsIdentity = WindowsIdentity.GetCurrent();
 				string message = Format.Exception(e, catchMessage);
-				string messageExtension = (e is OscException ? ((OscException)e).MessageExtension : null);
+				string extendedMessage = (e is OscException ? ((OscException)e).ExtendedMessage : null);
 				byte[] data;
 
-				if (string.IsNullOrEmpty(messageExtension))
+				if (string.IsNullOrEmpty(extendedMessage))
 				{
 					data = null;
 				}
-				else if (message.Length + messageExtension.Length < 32000)
+				else if (message.Length + extendedMessage.Length < 32000)
 				{
 					StringBuilder sb = new StringBuilder(message);
 
@@ -99,20 +97,20 @@ namespace openSourceC.FrameworkLibrary.Data
 						sb.Append(Environment.NewLine);
 					}
 
-					sb.Append(Environment.NewLine).Append(messageExtension);
+					sb.Append(Environment.NewLine).Append(extendedMessage);
 
 					message = sb.ToString();
 					data = null;
 				}
 				else
 				{
-					data = Encoding.UTF8.GetBytes(messageExtension);
+					data = Encoding.UTF8.GetBytes(extendedMessage);
 				}
 
 				ApplicationEventID = null;
 				ApplicationID = null;
 				Log = string.Empty;
-				Source = string.Empty;
+				Source = e.Source;
 				Type = EventLogEntryType.Error;
 				Category = category;
 				EventID = eventID;

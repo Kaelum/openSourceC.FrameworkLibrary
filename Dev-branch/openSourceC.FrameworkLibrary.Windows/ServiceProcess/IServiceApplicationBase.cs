@@ -11,9 +11,9 @@ namespace openSourceC.FrameworkLibrary.ServiceProcess
 		#region Service Events
 
 		/// <summary>
-		///		Provides status messages to subscribers.
+		///		Provides messages to subscribers.
 		/// </summary>
-		event EventHandler<StatusMessageEventArgs> StatusMessage;
+		event EventHandler<MessageEventArgs> Message;
 
 		#endregion
 
@@ -64,28 +64,6 @@ namespace openSourceC.FrameworkLibrary.ServiceProcess
 		///		Emulates an <see cref="ServiceBase.OnStop"/> command being sent to the service by the Service Control Manager (SCM).
 		/// </summary>
 		void ExecuteOnStop();
-
-		#endregion
-	}
-
-	/// <summary>
-	///		Summary description for StatusMessageEventArgs.
-	/// </summary>
-	public class StatusMessageEventArgs : EventArgs
-	{
-		/// <summary>Gets or sets the status message.</summary>
-		public string StatusMessage { get; private set; }
-
-		#region Class Constructors
-
-		/// <summary>
-		///		Class constructor.
-		/// </summary>
-		/// <param name="statusMessage">The status message.</param>
-		public StatusMessageEventArgs(string statusMessage)
-		{
-			StatusMessage = statusMessage;
-		}
 
 		#endregion
 	}

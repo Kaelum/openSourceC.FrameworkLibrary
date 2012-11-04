@@ -94,6 +94,10 @@ namespace openSourceC.FrameworkLibrary.Data
 				if (disposing)
 				{
 					// Dispose managed resources.
+					if (!dataReader.IsClosed)
+					{
+						dataReader.Close();
+					}
 
 					// Nullify references to managed resources that are not disposable.
 

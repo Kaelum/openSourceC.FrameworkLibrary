@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 
-using openSourceC.FrameworkLibrary.Common;
-
 namespace openSourceC.FrameworkLibrary.Data
 {
 	/// <summary>
@@ -13,10 +11,6 @@ namespace openSourceC.FrameworkLibrary.Data
 	public abstract class EventLogBase<TEventLog>
 		where TEventLog : EventLogBase<TEventLog>, new()
 	{
-		private string _eventLogName;
-		private readonly string _machineName;
-		private readonly string _sourceName;
-
 		//// TraceSwitch for changing which values are actually written to the
 		//// trace output file.
 		//private TraceSwitch _loggingSwitch;
@@ -36,9 +30,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <remarks>Prevents the parameterless creation of this object externaly.</remarks>
 		protected EventLogBase()
 		{
-			_eventLogName = DefaultEventLogName;
-			_machineName = Environment.MachineName;
-			_sourceName = DefaultEventLogSourceName;
+			EventLogName = DefaultEventLogName;
+			EventLogMachineName = Environment.MachineName;
+			EventLogSourceName = DefaultEventLogSourceName;
 		}
 
 		#endregion
@@ -66,14 +60,14 @@ namespace openSourceC.FrameworkLibrary.Data
 								//_instance._loggingSwitch = new TraceSwitch("Logging", "Entire Application");
 								//_instance._debugWriter = null;
 
-								if (!EventLog.Exists(_instance._eventLogName))
+								if (!EventLog.Exists(_instance.EventLogName))
 								{
-									if (EventLog.SourceExists(_instance._sourceName))
+									if (EventLog.SourceExists(_instance.EventLogSourceName))
 									{
-										EventLog.DeleteEventSource(_instance._sourceName);
+										EventLog.DeleteEventSource(_instance.EventLogSourceName);
 									}
 
-									EventLog.CreateEventSource(_instance._sourceName, _instance._eventLogName);
+									EventLog.CreateEventSource(_instance.EventLogSourceName, _instance.EventLogName);
 									Thread.Sleep(3000);
 								}
 							}
@@ -82,7 +76,7 @@ namespace openSourceC.FrameworkLibrary.Data
 								try
 								{
 									// Write the message to the system event log.
-									EventLog eventLog = new EventLog(_instance._eventLogName, _instance._machineName, _instance._sourceName);
+									EventLog eventLog = new EventLog(_instance.EventLogName, _instance.EventLogMachineName, _instance.EventLogSourceName);
 
 									//Write the entry to the event log
 									eventLog.WriteEntry(Format.Exception(ex), EventLogEntryType.Error);
@@ -120,26 +114,17 @@ namespace openSourceC.FrameworkLibrary.Data
 		///     log the event to, defaults to an empty string, indicating the
 		///     current machine.  A machine name (without \\), may be empty.
 		/// </value>
-		public string EventLogMachineName
-		{
-			get { return _machineName; }
-		}
+		public string EventLogMachineName { get; protected set; }
 
 		/// <value>
 		///     Property EventLogName is used to get the name of the event log, 
 		/// </value>
-		public string EventLogName
-		{
-			get { return _eventLogName; }
-		}
+		public string EventLogName { get; protected set; }
 
 		/// <value>
 		///     Property EventLogMachineName is used to get the source of the error to be written to the event log, 
 		/// </value>
-		public string EventLogSourceName
-		{
-			get { return _sourceName; }
-		}
+		public string EventLogSourceName { get; protected set; }
 
 		///// <summary>
 		/////		Gets the Logging switch for the application.
@@ -177,8 +162,26 @@ namespace openSourceC.FrameworkLibrary.Data
 			// We should never throw an exception while logging.
 			try
 			{
+				string source = (string.IsNullOrWhiteSpace(applicationEvent.Source) ? EventLogSourceName : applicationEvent.Source);
+
+				try
+				{
+					if (!EventLog.SourceExists(source, EventLogMachineName))
+					{
+						EventSourceCreationData sourceDate = new EventSourceCreationData(source, EventLogName);
+						sourceDate.MachineName = EventLogMachineName;
+
+						EventLog.CreateEventSource(sourceDate);
+					}
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine("Exception: ", ex);
+					source = EventLogSourceName;
+				}
+
 				// Write the message to the system event log.
-				EventLog eventLog = new EventLog(_eventLogName, _machineName, _sourceName);
+				EventLog eventLog = new EventLog(EventLogName, EventLogMachineName, source);
 
 				//Write the entry to the event log
 				eventLog.WriteEntry(
@@ -195,7 +198,7 @@ namespace openSourceC.FrameworkLibrary.Data
 			}
 			catch (Exception ex)
 			{
-				EventLog.WriteEntry(_sourceName, Format.Exception(ex), EventLogEntryType.Error);
+				EventLog.WriteEntry(EventLogSourceName, Format.Exception(ex), EventLogEntryType.Error);
 
 				Debug.WriteLine("==EventLogFailure".PadRight(80, '='));
 				Debug.WriteLine(Format.Exception(ex));
@@ -230,7 +233,7 @@ namespace openSourceC.FrameworkLibrary.Data
 			}
 			catch (Exception ex)
 			{
-				EventLog.WriteEntry(_sourceName, Format.Exception(ex), EventLogEntryType.Error);
+				EventLog.WriteEntry(EventLogSourceName, Format.Exception(ex), EventLogEntryType.Error);
 
 				Debug.WriteLine("==EventLogFailure".PadRight(80, '='));
 				Debug.WriteLine(Format.Exception(ex));

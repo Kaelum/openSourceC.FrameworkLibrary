@@ -1,6 +1,4 @@
-﻿#pragma warning disable 419 // Visual Studio is reporting a useless warning.
-
-//#define USES_UNMANGED_CODE
+﻿//#define USES_UNMANGED_CODE
 using System;
 using System.Configuration;
 using System.Data;
@@ -9,33 +7,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
-using openSourceC.FrameworkLibrary.Common;
-
 namespace openSourceC.FrameworkLibrary.Data
 {
-	/// <summary>
-	///		Summary description for DbReaderDelegate.
-	/// </summary>
-	/// <typeparam name="TDataReaderHelper"></typeparam>
-	/// <typeparam name="TDbDataReader"></typeparam>
-	/// <param name="dataReaderHelper"></param>
-	/// <returns></returns>
-	public delegate void DbReaderDelegate<TDataReaderHelper, TDbDataReader>(TDataReaderHelper dataReaderHelper)
-		where TDataReaderHelper : DataReaderHelper<TDataReaderHelper, TDbDataReader>, new()
-		where TDbDataReader : DbDataReader;
-
-	/// <summary>
-	///		Summary description for DbReaderDelegate.
-	/// </summary>
-	/// <typeparam name="TDataReaderHelper"></typeparam>
-	/// <typeparam name="TDbDataReader"></typeparam>
-	/// <typeparam name="TFillObject"></typeparam>
-	/// <param name="dataReaderHelper"></param>
-	/// <returns></returns>
-	public delegate TFillObject DbReaderDelegate<TDataReaderHelper, TDbDataReader, TFillObject>(TDataReaderHelper dataReaderHelper)
-		where TDataReaderHelper : DataReaderHelper<TDataReaderHelper, TDbDataReader>, new()
-		where TDbDataReader : DbDataReader;
-
 	/// <summary>
 	///		Summary description for DbFactoryCommand.
 	/// </summary>
@@ -64,7 +37,6 @@ namespace openSourceC.FrameworkLibrary.Data
 
 		private TDbCommand _cmd;
 		private TParamsHelper _paramsHelper;
-		private int? _returnValue = null;
 
 		// Track whether Dispose has been called.
 		private bool _disposed = false;
@@ -253,10 +225,11 @@ namespace openSourceC.FrameworkLibrary.Data
 
 		/// <summary>
 		///		Gets the return value from the last executed command.
+		///		<para>NOTE: May not be valid while the data reader is open.</para>
 		/// </summary>
 		public int? ReturnValue
 		{
-			get { return _returnValue; }
+			get { return Params.GetInt32(ReturnValueParameterName); }
 		}
 
 		/// <summary>
@@ -283,7 +256,7 @@ namespace openSourceC.FrameworkLibrary.Data
 
 		/// <summary>
 		///		Gets or sets how command results are applied to the <see cref="DataRow" /> when
-		///		used by the <see cref="DbDataAdapter.Update" /> method of a <see cref="DbDataAdapter" />.
+		///		used by the <see cref="M:DbDataAdapter.Update" /> method of a <see cref="DbDataAdapter" />.
 		/// </summary>
 		/// <value>
 		///		One of the <see cref="UpdateRowSource" /> values.
@@ -339,14 +312,7 @@ namespace openSourceC.FrameworkLibrary.Data
 					Command.Prepare();
 				}
 
-				try
-				{
-					return dataAdapter.Fill(dataSet);
-				}
-				finally
-				{
-					_returnValue = Params.GetInt32(ReturnValueParameterName);
-				}
+				return dataAdapter.Fill(dataSet);
 			}
 		}
 
@@ -372,14 +338,7 @@ namespace openSourceC.FrameworkLibrary.Data
 					_cmd.Prepare();
 				}
 
-				try
-				{
-					return _cmd.ExecuteNonQuery();
-				}
-				finally
-				{
-					_returnValue = Params.GetInt32(ReturnValueParameterName);
-				}
+				return _cmd.ExecuteNonQuery();
 			}
 			finally
 			{
@@ -388,6 +347,42 @@ namespace openSourceC.FrameworkLibrary.Data
 					//_cmd.Connection.Close();
 				}
 			}
+		}
+
+		/// <summary>
+		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" />.
+		/// </summary>
+		///	<returns>
+		///		A <see cref="T:TDataReaderHelper"/> object.
+		///	</returns>
+		public TDataReaderHelper ExecuteReader()
+		{
+			return ExecuteReader(CommandBehavior.Default);
+		}
+
+		/// <summary>
+		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" /> using
+		///		one of the <see cref="CommandBehavior" /> values.
+		/// </summary>
+		/// <param name="behavior">One of the <see cref="P:CommandBehavior"/> values.</param>
+		///	<returns>
+		///		A <see cref="T:TDataReaderHelper"/> object.
+		///	</returns>
+		public TDataReaderHelper ExecuteReader(CommandBehavior behavior)
+		{
+			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
+
+			if (!isOpened)
+			{
+				_cmd.Connection.Open();
+			}
+
+			if (AutoPrepare)
+			{
+				_cmd.Prepare();
+			}
+
+			return DataReaderHelper<TDataReaderHelper, TDbDataReader>.Create((TDbDataReader)_cmd.ExecuteReader(behavior));
 		}
 
 		/// <summary>
@@ -430,8 +425,6 @@ namespace openSourceC.FrameworkLibrary.Data
 					finally
 					{
 						dr.Close();
-
-						_returnValue = Params.GetInt32(ReturnValueParameterName);
 					}
 				}
 			}
@@ -495,8 +488,6 @@ namespace openSourceC.FrameworkLibrary.Data
 					finally
 					{
 						dr.Close();
-
-						_returnValue = Params.GetInt32(ReturnValueParameterName);
 					}
 				}
 			}
@@ -533,14 +524,7 @@ namespace openSourceC.FrameworkLibrary.Data
 					_cmd.Prepare();
 				}
 
-				try
-				{
-					return _cmd.ExecuteScalar();
-				}
-				finally
-				{
-					_returnValue = Params.GetInt32(ReturnValueParameterName);
-				}
+				return _cmd.ExecuteScalar();
 			}
 			finally
 			{

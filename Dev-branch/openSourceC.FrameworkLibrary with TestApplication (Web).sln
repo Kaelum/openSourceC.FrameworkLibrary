@@ -1,46 +1,52 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Common", "openSourceC.FrameworkLibrary.Common\openSourceC.FrameworkLibrary.Common.csproj", "{D5E60952-0F68-4676-A3B5-7BE1E61653E8}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication (Web)", "TestApplication (Web)\TestApplication (Web).csproj", "{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Core", "openSourceC.FrameworkLibrary.Core\openSourceC.FrameworkLibrary.Core.csproj", "{D5E60952-0F68-4676-A3B5-7BE1E61653E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Data", "openSourceC.FrameworkLibrary.Data\openSourceC.FrameworkLibrary.Data.csproj", "{0F4CBEA2-D2A8-4AE8-8A42-A6302D036FF8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Design", "openSourceC.FrameworkLibrary.Design\openSourceC.FrameworkLibrary.Design.csproj", "{11BAA767-3C8F-46C8-AD15-EBDDB5F29F24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Web", "openSourceC.FrameworkLibrary.Web\openSourceC.FrameworkLibrary.Web.csproj", "{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0F4CBEA2-D2A8-4AE8-8A42-A6302D036FF8} = {0F4CBEA2-D2A8-4AE8-8A42-A6302D036FF8}
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication (Web)", "TestApplication (Web)\TestApplication (Web).csproj", "{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Windows", "openSourceC.FrameworkLibrary.Windows\openSourceC.FrameworkLibrary.Windows.csproj", "{F8C93288-8276-4366-A165-AB2B8A467EA1}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs33
-		SccProjectUniqueName0 = openSourceC.FrameworkLibrary.Common\\openSourceC.FrameworkLibrary.Common.csproj
-		SccProjectName0 = openSourceC.FrameworkLibrary.Common
-		SccLocalPath0 = openSourceC.FrameworkLibrary.Common
-		SccProjectUniqueName1 = openSourceC.FrameworkLibrary.Web\\openSourceC.FrameworkLibrary.Web.csproj
-		SccProjectName1 = openSourceC.FrameworkLibrary.Web
-		SccLocalPath1 = openSourceC.FrameworkLibrary.Web
-		SccProjectUniqueName2 = openSourceC.FrameworkLibrary.Design\\openSourceC.FrameworkLibrary.Design.csproj
-		SccProjectName2 = openSourceC.FrameworkLibrary.Design
-		SccLocalPath2 = openSourceC.FrameworkLibrary.Design
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = TestApplication\u0020(Web)\\TestApplication\u0020(Web).csproj
+		SccProjectName1 = TestApplication\u0020(Web)
+		SccLocalPath1 = TestApplication\u0020(Web)
+		SccProjectUniqueName2 = openSourceC.FrameworkLibrary.Core\\openSourceC.FrameworkLibrary.Core.csproj
+		SccProjectName2 = openSourceC.FrameworkLibrary.Core
+		SccLocalPath2 = openSourceC.FrameworkLibrary.Core
 		SccProjectUniqueName3 = openSourceC.FrameworkLibrary.Data\\openSourceC.FrameworkLibrary.Data.csproj
 		SccProjectName3 = openSourceC.FrameworkLibrary.Data
 		SccLocalPath3 = openSourceC.FrameworkLibrary.Data
-		SccLocalPath4 = .
-		SccProjectUniqueName5 = TestApplication\u0020(Web)\\TestApplication\u0020(Web).csproj
-		SccProjectName5 = TestApplication\u0020(Web)
-		SccLocalPath5 = TestApplication\u0020(Web)
+		SccProjectUniqueName4 = openSourceC.FrameworkLibrary.Design\\openSourceC.FrameworkLibrary.Design.csproj
+		SccProjectName4 = openSourceC.FrameworkLibrary.Design
+		SccLocalPath4 = openSourceC.FrameworkLibrary.Design
+		SccProjectUniqueName5 = openSourceC.FrameworkLibrary.Web\\openSourceC.FrameworkLibrary.Web.csproj
+		SccProjectName5 = openSourceC.FrameworkLibrary.Web
+		SccLocalPath5 = openSourceC.FrameworkLibrary.Web
+		SccProjectUniqueName6 = openSourceC.FrameworkLibrary.Windows\\openSourceC.FrameworkLibrary.Windows.csproj
+		SccProjectName6 = openSourceC.FrameworkLibrary.Windows
+		SccLocalPath6 = openSourceC.FrameworkLibrary.Windows
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5E60952-0F68-4676-A3B5-7BE1E61653E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D5E60952-0F68-4676-A3B5-7BE1E61653E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5E60952-0F68-4676-A3B5-7BE1E61653E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,10 +63,10 @@ Global
 		{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F722D9F-D1F4-4F19-80BE-B007F11ABE6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

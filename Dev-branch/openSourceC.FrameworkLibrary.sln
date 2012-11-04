@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Common", "openSourceC.FrameworkLibrary.Common\openSourceC.FrameworkLibrary.Common.csproj", "{D5E60952-0F68-4676-A3B5-7BE1E61653E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Core", "openSourceC.FrameworkLibrary.Core\openSourceC.FrameworkLibrary.Core.csproj", "{D5E60952-0F68-4676-A3B5-7BE1E61653E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Data", "openSourceC.FrameworkLibrary.Data\openSourceC.FrameworkLibrary.Data.csproj", "{0F4CBEA2-D2A8-4AE8-8A42-A6302D036FF8}"
 EndProject
@@ -17,9 +17,9 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs33
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = openSourceC.FrameworkLibrary.Common\\openSourceC.FrameworkLibrary.Common.csproj
-		SccProjectName1 = openSourceC.FrameworkLibrary.Common
-		SccLocalPath1 = openSourceC.FrameworkLibrary.Common
+		SccProjectUniqueName1 = openSourceC.FrameworkLibrary.Core\\openSourceC.FrameworkLibrary.Core.csproj
+		SccProjectName1 = openSourceC.FrameworkLibrary.Core
+		SccLocalPath1 = openSourceC.FrameworkLibrary.Core
 		SccProjectUniqueName2 = openSourceC.FrameworkLibrary.Data\\openSourceC.FrameworkLibrary.Data.csproj
 		SccProjectName2 = openSourceC.FrameworkLibrary.Data
 		SccLocalPath2 = openSourceC.FrameworkLibrary.Data

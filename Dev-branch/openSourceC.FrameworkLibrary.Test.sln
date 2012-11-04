@@ -4,18 +4,20 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26466640-8CB5-4C24-84F4-6C4A2D8FE9B5}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
-		openSourceC.FrameworkLibrary.Common.vsmdi = openSourceC.FrameworkLibrary.Common.vsmdi
+		openSourceC.FrameworkLibrary.Core.vsmdi = openSourceC.FrameworkLibrary.Core.vsmdi
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Common", "openSourceC.FrameworkLibrary.Common\openSourceC.FrameworkLibrary.Common.csproj", "{D5E60952-0F68-4676-A3B5-7BE1E61653E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Core", "openSourceC.FrameworkLibrary.Core\openSourceC.FrameworkLibrary.Core.csproj", "{D5E60952-0F68-4676-A3B5-7BE1E61653E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Common.Test", "openSourceC.FrameworkLibrary.Common.Test\openSourceC.FrameworkLibrary.Common.Test.csproj", "{DE0F0919-54F3-42E9-AE86-691C32545B05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Core.Test", "openSourceC.FrameworkLibrary.Core.Test\openSourceC.FrameworkLibrary.Core.Test.csproj", "{DE0F0919-54F3-42E9-AE86-691C32545B05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Data", "openSourceC.FrameworkLibrary.Data\openSourceC.FrameworkLibrary.Data.csproj", "{0F4CBEA2-D2A8-4AE8-8A42-A6302D036FF8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Data.Test", "openSourceC.FrameworkLibrary.Data.Test\openSourceC.FrameworkLibrary.Data.Test.csproj", "{D83D7D42-EF5E-4583-99A0-89C44273E005}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Design", "openSourceC.FrameworkLibrary.Design\openSourceC.FrameworkLibrary.Design.csproj", "{11BAA767-3C8F-46C8-AD15-EBDDB5F29F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Design.Test", "openSourceC.FrameworkLibrary.Design.Test\openSourceC.FrameworkLibrary.Design.Test.csproj", "{93B765A5-3A27-4291-91B9-A7ED62328CE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Web", "openSourceC.FrameworkLibrary.Web\openSourceC.FrameworkLibrary.Web.csproj", "{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -26,39 +28,47 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Windows", "openSourceC.FrameworkLibrary.Windows\openSourceC.FrameworkLibrary.Windows.csproj", "{F8C93288-8276-4366-A165-AB2B8A467EA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Windows.Test", "openSourceC.FrameworkLibrary.Windows.Test\openSourceC.FrameworkLibrary.Windows.Test.csproj", "{21E95BE7-0F4B-4794-8A9E-45ED2DA4EB20}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs33
-		SccProjectUniqueName0 = openSourceC.FrameworkLibrary.Common\\openSourceC.FrameworkLibrary.Common.csproj
-		SccProjectName0 = openSourceC.FrameworkLibrary.Common
-		SccLocalPath0 = openSourceC.FrameworkLibrary.Common
-		SccProjectUniqueName1 = openSourceC.FrameworkLibrary.Data\\openSourceC.FrameworkLibrary.Data.csproj
-		SccProjectName1 = openSourceC.FrameworkLibrary.Data
-		SccLocalPath1 = openSourceC.FrameworkLibrary.Data
-		SccProjectUniqueName2 = openSourceC.FrameworkLibrary.Design\\openSourceC.FrameworkLibrary.Design.csproj
-		SccProjectName2 = openSourceC.FrameworkLibrary.Design
-		SccLocalPath2 = openSourceC.FrameworkLibrary.Design
-		SccProjectUniqueName3 = openSourceC.FrameworkLibrary.Web\\openSourceC.FrameworkLibrary.Web.csproj
-		SccProjectName3 = openSourceC.FrameworkLibrary.Web
-		SccLocalPath3 = openSourceC.FrameworkLibrary.Web
-		SccProjectUniqueName4 = openSourceC.FrameworkLibrary.Windows\\openSourceC.FrameworkLibrary.Windows.csproj
-		SccProjectName4 = openSourceC.FrameworkLibrary.Windows
-		SccLocalPath4 = openSourceC.FrameworkLibrary.Windows
-		SccLocalPath5 = .
-		SccProjectUniqueName6 = openSourceC.FrameworkLibrary.Common.Test\\openSourceC.FrameworkLibrary.Common.Test.csproj
-		SccProjectName6 = openSourceC.FrameworkLibrary.Common.Test
-		SccLocalPath6 = openSourceC.FrameworkLibrary.Common.Test
-		SccProjectUniqueName7 = openSourceC.FrameworkLibrary.Data.Test\\openSourceC.FrameworkLibrary.Data.Test.csproj
-		SccProjectName7 = openSourceC.FrameworkLibrary.Data.Test
-		SccLocalPath7 = openSourceC.FrameworkLibrary.Data.Test
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = openSourceC.FrameworkLibrary.Core\\openSourceC.FrameworkLibrary.Core.csproj
+		SccProjectName1 = openSourceC.FrameworkLibrary.Core
+		SccLocalPath1 = openSourceC.FrameworkLibrary.Core
+		SccProjectUniqueName2 = openSourceC.FrameworkLibrary.Core.Test\\openSourceC.FrameworkLibrary.Core.Test.csproj
+		SccProjectName2 = openSourceC.FrameworkLibrary.Core.Test
+		SccLocalPath2 = openSourceC.FrameworkLibrary.Core.Test
+		SccProjectUniqueName3 = openSourceC.FrameworkLibrary.Data\\openSourceC.FrameworkLibrary.Data.csproj
+		SccProjectName3 = openSourceC.FrameworkLibrary.Data
+		SccLocalPath3 = openSourceC.FrameworkLibrary.Data
+		SccProjectUniqueName4 = openSourceC.FrameworkLibrary.Data.Test\\openSourceC.FrameworkLibrary.Data.Test.csproj
+		SccProjectName4 = openSourceC.FrameworkLibrary.Data.Test
+		SccLocalPath4 = openSourceC.FrameworkLibrary.Data.Test
+		SccProjectUniqueName5 = openSourceC.FrameworkLibrary.Design\\openSourceC.FrameworkLibrary.Design.csproj
+		SccProjectName5 = openSourceC.FrameworkLibrary.Design
+		SccLocalPath5 = openSourceC.FrameworkLibrary.Design
+		SccProjectUniqueName6 = openSourceC.FrameworkLibrary.Design.Test\\openSourceC.FrameworkLibrary.Design.Test.csproj
+		SccProjectName6 = openSourceC.FrameworkLibrary.Design.Test
+		SccLocalPath6 = openSourceC.FrameworkLibrary.Design.Test
+		SccProjectUniqueName7 = openSourceC.FrameworkLibrary.Web\\openSourceC.FrameworkLibrary.Web.csproj
+		SccProjectName7 = openSourceC.FrameworkLibrary.Web
+		SccLocalPath7 = openSourceC.FrameworkLibrary.Web
 		SccProjectUniqueName8 = openSourceC.FrameworkLibrary.Web.Test\\openSourceC.FrameworkLibrary.Web.Test.csproj
 		SccProjectName8 = openSourceC.FrameworkLibrary.Web.Test
 		SccLocalPath8 = openSourceC.FrameworkLibrary.Web.Test
+		SccProjectUniqueName9 = openSourceC.FrameworkLibrary.Windows\\openSourceC.FrameworkLibrary.Windows.csproj
+		SccProjectName9 = openSourceC.FrameworkLibrary.Windows
+		SccLocalPath9 = openSourceC.FrameworkLibrary.Windows
+		SccProjectUniqueName10 = openSourceC.FrameworkLibrary.Windows.Test\\openSourceC.FrameworkLibrary.Windows.Test.csproj
+		SccProjectName10 = openSourceC.FrameworkLibrary.Windows.Test
+		SccLocalPath10 = openSourceC.FrameworkLibrary.Windows.Test
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = openSourceC.FrameworkLibrary.Common.vsmdi
+		CategoryFile = openSourceC.FrameworkLibrary.Core.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +95,10 @@ Global
 		{11BAA767-3C8F-46C8-AD15-EBDDB5F29F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11BAA767-3C8F-46C8-AD15-EBDDB5F29F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11BAA767-3C8F-46C8-AD15-EBDDB5F29F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B765A5-3A27-4291-91B9-A7ED62328CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B765A5-3A27-4291-91B9-A7ED62328CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B765A5-3A27-4291-91B9-A7ED62328CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B765A5-3A27-4291-91B9-A7ED62328CE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,7 +108,13 @@ Global
 		{7DBC146A-0704-43DD-AACB-3C446C2D5FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DBC146A-0704-43DD-AACB-3C446C2D5FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8C93288-8276-4366-A165-AB2B8A467EA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21E95BE7-0F4B-4794-8A9E-45ED2DA4EB20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21E95BE7-0F4B-4794-8A9E-45ED2DA4EB20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21E95BE7-0F4B-4794-8A9E-45ED2DA4EB20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21E95BE7-0F4B-4794-8A9E-45ED2DA4EB20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

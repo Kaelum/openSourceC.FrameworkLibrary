@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 
-using openSourceC.FrameworkLibrary.Common;
+using openSourceC.FrameworkLibrary.Configuration;
 
 namespace openSourceC.FrameworkLibrary.Data
 {
@@ -16,9 +16,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///		Initializes a new instance of the <see cref="DbFactoryBase"/> class.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/> object.</param>
+		/// <param name="configurationSection">The <see cref="DbFactorySectionBase"/> object.</param>
 		/// <param name="settingName">The name of data factory setting to use.</param>
-		protected DbFactoryBase(DbFactorySection configurationSection, string settingName)
+		protected DbFactoryBase(DbFactorySectionBase configurationSection, string settingName)
 		{
 			if (configurationSection == null)
 			{
@@ -35,25 +35,25 @@ namespace openSourceC.FrameworkLibrary.Data
 				throw new OscErrorException("settings element not found.");
 			}
 
-			DbFactorySettings dataFactorySettings = configurationSection.Settings[settingName];
+			SettingSettings settingSettings = configurationSection.Settings[settingName];
 
-			if (dataFactorySettings == null)
+			if (settingSettings == null)
 			{
 				throw new OscErrorException(string.Format("{0} not found.", settingName));
 			}
 
-			Debug.WriteLine(string.Format("DataFactorySettings: Name: {0}, ConnectionStringName: {1}", dataFactorySettings.Name, dataFactorySettings.ConnectionStringName));
+			Debug.WriteLine(string.Format("DataFactorySettings: Name: {0}, ConnectionStringName: {1}", settingSettings.Name, settingSettings.ConnectionStringName));
 
-			if (dataFactorySettings.ElementInformation != null && dataFactorySettings.ElementInformation.Properties != null)
+			if (settingSettings.ElementInformation != null && settingSettings.ElementInformation.Properties != null)
 			{
-				foreach (PropertyInformation pi in dataFactorySettings.ElementInformation.Properties)
+				foreach (PropertyInformation pi in settingSettings.ElementInformation.Properties)
 				{
 					Debug.WriteLine(string.Format("\tProperty: {0} = {1}", pi.Name, pi.Value));
 				}
 			}
 
-			ConnectionStringName = dataFactorySettings.ConnectionStringName;
-			ApplicationName = dataFactorySettings.ApplicationName;
+			ConnectionStringName = settingSettings.ConnectionStringName;
+			ApplicationName = settingSettings.ApplicationName;
 		}
 
 		#endregion
@@ -89,10 +89,10 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///		Initializes a new instance of the <see cref="DbFactoryBase&lt;TRequestContext&gt;"/> class.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/> object.</param>
+		/// <param name="configurationSection">The <see cref="DbFactorySectionBase"/> object.</param>
 		/// <param name="settingName">The name of data factory setting to use.</param>
 		/// <param name="requestContext">The <typeparamref name="TRequestContext"/> object.</param>
-		protected DbFactoryBase(DbFactorySection configurationSection, string settingName, TRequestContext requestContext)
+		protected DbFactoryBase(DbFactorySectionBase configurationSection, string settingName, TRequestContext requestContext)
 			: base(configurationSection, settingName) { RequestContext = requestContext; }
 
 		#endregion

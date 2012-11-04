@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows;
 
-using openSourceC.FrameworkLibrary.Common;
-
 namespace openSourceC.FrameworkLibrary.Windows
 {
 	/// <summary>
