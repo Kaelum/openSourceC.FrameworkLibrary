@@ -3,14 +3,10 @@ using System.Data.Common;
 using System.Runtime.Serialization;
 using System.Text;
 
-using openSourceC.FrameworkLibrary.Common;
-
 namespace openSourceC.FrameworkLibrary.Data
 {
 	/// <summary>
-	///		Initializes a new instance of the <see cref="DbCommandException" />
-	///		class with a specified error message and a reference to the
-	///		inner exception that is the cause of this exception.
+	///		The exception that is thrown when a data access error has occurred.
 	/// </summary>
 	[Serializable]
 	public class DbCommandException : OscErrorException
@@ -182,15 +178,6 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///		Gets the code that was returned from the data access object.
 		/// </summary>
-		public string ExecutionString
-		{
-			get { return base.Data["ExecutionString"] as string; }
-			private set { base.Data["ExecutionString"] = value; }
-		}
-
-		/// <summary>
-		///		Gets the code that was returned from the data access object.
-		/// </summary>
 		public int? ReturnCode
 		{
 			get { return base.Data["ReturnCode"] as int?; }
@@ -228,11 +215,10 @@ namespace openSourceC.FrameworkLibrary.Data
 		{
 			if (command != null)
 			{
-				MessageExtension = DbHelper.CommandToString(command);
+				ExtendedMessage = DbHelper.CommandToString(command);
 			}
 
 			ReturnCode = returnCode;
-			ExecutionString = MessageExtension;
 		}
 
 		#endregion

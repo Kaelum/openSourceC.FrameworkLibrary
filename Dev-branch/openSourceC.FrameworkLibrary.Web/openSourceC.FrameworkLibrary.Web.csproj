@@ -84,6 +84,7 @@
   <ItemGroup>
     <None Include="Web\CachedPathData.cs" />
     <Compile Include="Web\Enumerations.cs" />
+    <Compile Include="Web\Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Web\FileChangeEvent.cs" />
     <Compile Include="Web\FileChangeEventHandler.cs" />
     <Compile Include="Web\Handlers\CaptchaImageHandler.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Web\Security\SampleMembershipProviderSettings.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Web\Security\UserNotFoundException.cs" />
     <Compile Include="Web\SR_Base.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -137,9 +139,9 @@
     <Compile Include="Web\VirtualPath.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Common\openSourceC.FrameworkLibrary.Common.csproj">
+    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Core\openSourceC.FrameworkLibrary.Core.csproj">
       <Project>{D5E60952-0F68-4676-A3B5-7BE1E61653E8}</Project>
-      <Name>openSourceC.FrameworkLibrary.Common</Name>
+      <Name>openSourceC.FrameworkLibrary.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

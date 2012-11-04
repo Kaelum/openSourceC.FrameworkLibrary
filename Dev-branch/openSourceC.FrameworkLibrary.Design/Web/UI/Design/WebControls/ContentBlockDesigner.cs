@@ -6,10 +6,7 @@ using System.Text;
 using System.Web.UI;
 using System.Web.UI.Design;
 using System.Web.UI.Design.WebControls;
-using System.Web.UI.WebControls;
 
-using openSourceC.FrameworkLibrary.Common;
-using openSourceC.FrameworkLibrary.Web.Resources.Design;
 using openSourceC.FrameworkLibrary.Web.UI.WebControls;
 
 namespace openSourceC.FrameworkLibrary.Web.UI.Design.WebControls

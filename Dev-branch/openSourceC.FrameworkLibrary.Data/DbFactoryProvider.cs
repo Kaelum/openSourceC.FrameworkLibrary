@@ -4,50 +4,52 @@ using System.Configuration;
 using System.Configuration.Provider;
 using System.Diagnostics;
 
-using openSourceC.FrameworkLibrary.Common;
+using openSourceC.FrameworkLibrary.Configuration;
 
 namespace openSourceC.FrameworkLibrary.Data
 {
 	/// <summary>
 	///		Summary description for DbFactoryProvider.
 	/// </summary>
-	public abstract class DbFactoryProvider : DbFactoryProviderBase
+	/// <typeparam name="TDataFactoryProviderInterface">The <typeparamref name="TDataFactoryProviderInterface"/> type.</typeparam>
+	public abstract class DbFactoryProvider<TDataFactoryProviderInterface> : DbFactoryProviderBase<TDataFactoryProviderInterface>
+		where TDataFactoryProviderInterface : class
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="DbFactoryProvider"/> class.
+		///		Initializes a new instance of the <see cref="DbFactoryProvider&lt;TDataFactoryProviderInterface&gt;"/> class.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/> object.</param>
+		/// <param name="settingSettingsCollection">The <see cref="SettingSettingsCollection"/> object.</param>
 		/// <param name="settingName">The name of data factory setting to use.  If null, or not set,
 		///		the <see cref="P:FactorySettings"/>, <see cref="P:ApplicationName"/>, and
 		///		<see cref="P:ConnectionStringName"/> properties will not be usable until the
 		///		<see cref="P:FactoryName"/> property is set.</param>
-		protected DbFactoryProvider(DbFactorySection configurationSection, string settingName = null)
-			: base(configurationSection, settingName) { }
+		protected DbFactoryProvider(SettingSettingsCollection settingSettingsCollection, string settingName = null)
+			: base(settingSettingsCollection, settingName) { }
 
 		#endregion
 
 		#region CreateInstance
 
 		/// <summary>
-		///		Creates an instance of <see cref="DbFactoryProvider"/> defined by the specified
-		///		<see cref="DbFactorySection"/> and provider name.
+		///		Creates an instance of <see cref="DbFactoryProvider&lt;TDataFactoryProviderInterface&gt;"/> defined by the specified
+		///		<see cref="ProviderSettingsCollection"/> and provider name.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactoryProvider"/> object.</param>
+		/// <param name="providerSettings">The <see cref="ProviderSettingsCollection"/> object.</param>
 		/// <param name="providerName">The provider name.</param>
 		/// <returns>
-		///		A <see cref="DbFactoryProvider"/> instance.
+		///		A <see cref="DbFactoryProvider&lt;TDataFactoryProviderInterface&gt;"/> instance.
 		/// </returns>
-		public static new DbFactoryProvider CreateInstance(DbFactorySection configurationSection, string providerName)
+		public static new DbFactoryProvider<TDataFactoryProviderInterface> CreateInstance(ProviderSettingsCollection providerSettings, string providerName)
 		{
-			CreateInstanceReturn ro = DbFactoryProviderBase.CreateInstance(configurationSection, providerName);
+			CreateInstanceReturn ro = DbFactoryProviderBase<TDataFactoryProviderInterface>.CreateInstance(providerSettings, providerName);
 
-			DbFactoryProvider instance = ro.Instance as DbFactoryProvider;
+			DbFactoryProvider<TDataFactoryProviderInterface> instance = ro.Instance as DbFactoryProvider<TDataFactoryProviderInterface>;
 
 			if (instance == null)
 			{
-				throw new OscErrorException(string.Format("{0} is not a {1}.", ro.Settings.Name, typeof(DbFactoryProvider).ToString()));
+				throw new OscErrorException(string.Format("{0} is not a {1}.", ro.Settings.Name, typeof(DbFactoryProvider<TDataFactoryProviderInterface>).ToString()));
 			}
 
 			instance.Initialize(ro.Settings.Name, ro.Settings.Parameters);
@@ -61,57 +63,62 @@ namespace openSourceC.FrameworkLibrary.Data
 	/// <summary>
 	///		Summary description for DbFactoryProvider&lt;TRequestContext&gt;.
 	/// </summary>
-	/// <typeparam name="TRequestContext">The <typeparamref name="TRequestContext"/> type.</typeparam>
-	public abstract class DbFactoryProvider<TRequestContext> : DbFactoryProviderBase
-		where TRequestContext : struct
+	/// <typeparam name="TUserRequestContext">The <typeparamref name="TUserRequestContext"/> type.</typeparam>
+	/// <typeparam name="TDataFactoryProviderInterface">The <typeparamref name="TDataFactoryProviderInterface"/> type.</typeparam>
+	public abstract class DbFactoryProvider<TUserRequestContext, TDataFactoryProviderInterface> : DbFactoryProviderBase<TDataFactoryProviderInterface>
+		where TUserRequestContext : struct
+		where TDataFactoryProviderInterface : class
 	{
-		/// <summary>Gets the current <see cref="T:TRequestContext"/> object.</summary>
-		public TRequestContext RequestContext { get; private set; }
-
-
 		#region Constructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="DbFactoryProvider&lt;TRequestContext&gt;"/> class. 
+		///		Initializes a new instance of the <see cref="DbFactoryProvider&lt;TUserRequestContext&gt;"/> class. 
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/> object.</param>
+		/// <param name="settingSettingsCollection">The <see cref="SettingSettingsCollection"/> object.</param>
 		/// <param name="settingName">The name of data factory setting to use.  If null, or not set,
 		///		the <see cref="P:FactorySettings"/>, <see cref="P:ApplicationName"/>, and
 		///		<see cref="P:ConnectionStringName"/> properties will not be usable until the
 		///		<see cref="P:FactoryName"/> property is set.</param>
-		protected DbFactoryProvider(DbFactorySection configurationSection, string settingName = null)
-			: base(configurationSection, settingName) { }
+		protected DbFactoryProvider(SettingSettingsCollection settingSettingsCollection, string settingName = null)
+			: base(settingSettingsCollection, settingName) { }
 
 		#endregion
 
 		#region CreateInstance
 
 		/// <summary>
-		///		Creates an instance of <see cref="DbFactoryProvider"/> defined by the specified
-		///		<see cref="DbFactorySection"/> and provider name.
+		///		Creates an instance of <see cref="DbFactoryProvider&lt;TDataFactoryProviderInterface&gt;"/> defined by the specified
+		///		<see cref="ProviderSettingsCollection"/> and provider name.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactoryProvider"/> object.</param>
+		/// <param name="providerSettings">The <see cref="ProviderSettingsCollection"/> object.</param>
 		/// <param name="providerName">The provider name.</param>
-		/// <param name="requestContext">The <typeparamref name="TRequestContext"/> object.</param>
+		/// <param name="userRequestContext">The <typeparamref name="TUserRequestContext"/> object.</param>
 		/// <returns>
-		///		A <see cref="DbFactoryProvider&lt;TRequestContext&gt;"/> instance.
+		///		A <see cref="DbFactoryProvider&lt;TDataFactoryProviderInterface, TUserRequestContext&gt;"/> instance.
 		/// </returns>
-		public static DbFactoryProvider<TRequestContext> CreateInstance(DbFactorySection configurationSection, string providerName, TRequestContext requestContext)
+		public static DbFactoryProvider<TUserRequestContext, TDataFactoryProviderInterface> CreateInstance(ProviderSettingsCollection providerSettings, string providerName, TUserRequestContext userRequestContext)
 		{
-			CreateInstanceReturn ro = DbFactoryProviderBase.CreateInstance(configurationSection, providerName);
+			CreateInstanceReturn ro = DbFactoryProviderBase<TDataFactoryProviderInterface>.CreateInstance(providerSettings, providerName);
 
-			DbFactoryProvider<TRequestContext> instance = ro.Instance as DbFactoryProvider<TRequestContext>;
+			DbFactoryProvider<TUserRequestContext, TDataFactoryProviderInterface> instance = ro.Instance as DbFactoryProvider<TUserRequestContext, TDataFactoryProviderInterface>;
 
 			if (instance == null)
 			{
-				throw new OscErrorException(string.Format("{0} is not a {1}.", ro.Settings.Name, typeof(DbFactoryProvider<TRequestContext>).ToString()));
+				throw new OscErrorException(string.Format("{0} is not a {1}.", ro.Settings.Name, typeof(DbFactoryProvider<TUserRequestContext, TDataFactoryProviderInterface>).ToString()));
 			}
 
-			instance.RequestContext = requestContext;
+			instance.UserRequestContext = userRequestContext;
 			instance.Initialize(ro.Settings.Name, ro.Settings.Parameters);
 
 			return instance;
 		}
+
+		#endregion
+
+		#region Protected Properties
+
+		/// <summary>Gets the current <see cref="T:TUserRequestContext"/> object.</summary>
+		protected TUserRequestContext UserRequestContext { get; private set; }
 
 		#endregion
 	}
@@ -119,7 +126,9 @@ namespace openSourceC.FrameworkLibrary.Data
 	/// <summary>
 	///		Summary description for DbFactoryProviderBase.
 	/// </summary>
-	public abstract class DbFactoryProviderBase : ProviderBase
+	/// <typeparam name="TDataFactoryProviderInterface">The <typeparamref name="TDataFactoryProviderInterface"/> type.</typeparam>
+	public abstract class DbFactoryProviderBase<TDataFactoryProviderInterface> : ProviderBase
+		where TDataFactoryProviderInterface : class
 	{
 		/// <summary></summary>
 		protected struct CreateInstanceReturn
@@ -134,41 +143,36 @@ namespace openSourceC.FrameworkLibrary.Data
 		#region Constructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="DbFactoryProviderBase"/> class.
+		///		Initializes a new instance of the <see cref="DbFactoryProviderBase&lt;TDataFactoryProviderInterface&gt;"/> class.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/> object.</param>
+		/// <param name="settingSettingsCollection">The <see cref="ProviderSettingsCollection"/> object.</param>
 		/// <param name="settingName">The name of data factory setting to use.  If null, or not set,
 		///		the <see cref="P:FactorySettings"/>, <see cref="P:ApplicationName"/>, and
 		///		<see cref="P:ConnectionStringName"/> properties will not be usable until the
 		///		<see cref="FactoryName"/> property is set.</param>
-		protected DbFactoryProviderBase(DbFactorySection configurationSection, string settingName = null)
+		protected DbFactoryProviderBase(SettingSettingsCollection settingSettingsCollection, string settingName = null)
 		{
-			if (configurationSection == null)
+			if (settingSettingsCollection == null)
 			{
 				throw new ArgumentNullException("configurationSection");
 			}
 
-			if (configurationSection.Settings == null)
-			{
-				throw new OscErrorException("settings element not found.");
-			}
-
-			Configuration = configurationSection;
+			SettingSettingsCollection = settingSettingsCollection;
 
 			if (settingName != null)
 			{
 				FactoryName = settingName;
 
-				if (FactorySettings == null)
+				if (SettingSettings == null)
 				{
 					throw new OscErrorException(string.Format("{0} not found.", FactoryName));
 				}
 
-				Debug.WriteLine(string.Format("DataFactorySettings: Name: {0}, ConnectionStringName: {1}", FactorySettings.Name, FactorySettings.ConnectionStringName));
+				Debug.WriteLine(string.Format("DataFactorySettings: Name: {0}, ConnectionStringName: {1}", SettingSettings.Name, SettingSettings.ConnectionStringName));
 
-				if (FactorySettings.ElementInformation != null && FactorySettings.ElementInformation.Properties != null)
+				if (SettingSettings.ElementInformation != null && SettingSettings.ElementInformation.Properties != null)
 				{
-					foreach (PropertyInformation pi in FactorySettings.ElementInformation.Properties)
+					foreach (PropertyInformation pi in SettingSettings.ElementInformation.Properties)
 					{
 						Debug.WriteLine(string.Format("\tProperty: {0} = {1}", pi.Name, pi.Value));
 					}
@@ -197,18 +201,18 @@ namespace openSourceC.FrameworkLibrary.Data
 
 		/// <summary>
 		///		Creates a <see cref="ProviderBase"/> based instance defined by the specified
-		///		provider within the <see cref="DbFactorySection"/> object.
+		///		provider within the <see cref="ProviderSettingsCollection"/> object.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/>  object.</param>
+		/// <param name="providerSettings">The <see cref="ProviderSettingsCollection"/> object.</param>
 		/// <param name="providerName">The provider name.</param>
 		/// <returns>
 		///		A <see cref="CreateInstanceReturn"/> object.
 		/// </returns>
-		protected static CreateInstanceReturn CreateInstance(DbFactorySection configurationSection, string providerName)
+		protected static CreateInstanceReturn CreateInstance(ProviderSettingsCollection providerSettings, string providerName)
 		{
-			if (configurationSection == null)
+			if (providerSettings == null)
 			{
-				throw new ArgumentNullException("configurationSection");
+				throw new ArgumentNullException("providerSettings");
 			}
 
 			if (providerName == null)
@@ -216,13 +220,8 @@ namespace openSourceC.FrameworkLibrary.Data
 				throw new ArgumentNullException("providerName");
 			}
 
-			if (configurationSection.Providers == null)
-			{
-				throw new OscErrorException("providers element not found.");
-			}
-
 			CreateInstanceReturn ro = new CreateInstanceReturn();
-			ro.Settings = configurationSection.Providers[providerName];
+			ro.Settings = providerSettings[providerName];
 
 			if (ro.Settings == null)
 			{
@@ -241,13 +240,19 @@ namespace openSourceC.FrameworkLibrary.Data
 			}
 
 			Type type = Type.GetType(ro.Settings.Type, true);
+			object instance = Activator.CreateInstance(type);
 
-			ro.Instance = Activator.CreateInstance(type) as ProviderBase;
+			if (!(instance is TDataFactoryProviderInterface))
+			{
+				throw new OscErrorException(string.Format("{0} does not derive from {1}.", ro.Settings.Name, typeof(TDataFactoryProviderInterface).ToString()));
+			}
 
-			if (ro.Instance == null)
+			if (!(instance is ProviderBase))
 			{
 				throw new OscErrorException(string.Format("{0} does not derive from {1}.", ro.Settings.Name, typeof(ProviderBase).ToString()));
 			}
+
+			ro.Instance = (ProviderBase)instance;
 
 			return ro;
 		}
@@ -256,24 +261,24 @@ namespace openSourceC.FrameworkLibrary.Data
 
 		#region Public Properties
 
-		/// <summary>Gets the <see cref="DbFactorySection"/> object.</summary>
-		public DbFactorySection Configuration { get; private set; }
+		/// <summary>Gets the <see cref="SettingSettingsCollection"/> object.</summary>
+		public SettingSettingsCollection SettingSettingsCollection { get; private set; }
 
 		#endregion
 
 		#region Protected Properties
 
 		/// <summary>Gets the application name.</summary>
-		protected string ApplicationName { get { return FactorySettings.ApplicationName; } }
+		protected string ApplicationName { get { return SettingSettings.ApplicationName; } }
 
 		/// <summary>Gets the connection string name.</summary>
-		protected string ConnectionStringName { get { return FactorySettings.ConnectionStringName; } }
+		protected string ConnectionStringName { get { return SettingSettings.ConnectionStringName; } }
 
 		/// <summary>Gets or sets the factory name.</summary>
 		protected string FactoryName { get; set; }
 
-		/// <summary>Gets the <see cref="DbFactorySettings"/> object.</summary>
-		protected DbFactorySettings FactorySettings { get { return Configuration.Settings[FactoryName]; } }
+		/// <summary>Gets the <see cref="SettingSettings"/> object.</summary>
+		protected SettingSettings SettingSettings { get { return SettingSettingsCollection[FactoryName]; } }
 
 		#endregion
 	}

@@ -2,8 +2,6 @@
 using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlTypes;
-using openSourceC.FrameworkLibrary.Common;
 
 namespace openSourceC.FrameworkLibrary.Data
 {

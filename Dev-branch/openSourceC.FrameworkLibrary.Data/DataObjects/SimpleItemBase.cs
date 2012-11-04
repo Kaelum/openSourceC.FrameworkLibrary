@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Xml.Serialization;
 
-using openSourceC.FrameworkLibrary.Common;
-
 namespace openSourceC.FrameworkLibrary.Data
 {
 	/// <summary>
@@ -104,12 +102,12 @@ namespace openSourceC.FrameworkLibrary.Data
 			{
 				if (Attribute.GetCustomAttribute(pi, typeof(KeyAttribute)) != null)
 				{
-					ColumnAttribute columnAttribute = (ColumnAttribute)Attribute.GetCustomAttribute(pi, typeof(ColumnAttribute));
+					DisplayAttribute columnAttribute = (DisplayAttribute)Attribute.GetCustomAttribute(pi, typeof(DisplayAttribute));
 
 					keyProperties.Add(columnAttribute == null ? -1 : columnAttribute.Order, pi);
 				}
 
-				//keyProperties.Add(new KeyColumnAttributes() { Key = keyAttribute, Column = (ColumnAttribute)Attribute.GetCustomAttribute(pi, typeof(ColumnAttribute)) });
+				//keyProperties.Add(new KeyColumnAttributes() { Key = keyAttribute, Column = (DisplayAttribute)Attribute.GetCustomAttribute(pi, typeof(DisplayAttribute)) });
 			}
 
 			if (keyProperties.Count == 0)

@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Configuration;
 
 namespace openSourceC.FrameworkLibrary.Data
 {
 	/// <summary>
-	///		Summary description for DbFactoryProviderAccessor&lt;TDataFactoryProxyInterface&gt;.
+	///		Summary description for DbFactoryProviderAccessor&lt;TDataFactoryProviderInterface&gt;.
 	/// </summary>
-	/// <typeparam name="TDataFactoryProxyInterface"></typeparam>
-	public abstract class DbFactoryProviderAccessor<TDataFactoryProxyInterface> : IDisposable
-		where TDataFactoryProxyInterface : class
+	/// <typeparam name="TDataFactoryProviderInterface"></typeparam>
+	public abstract class DbFactoryProviderAccessor<TDataFactoryProviderInterface> : IDisposable
+		where TDataFactoryProviderInterface : class
 	{
-		private DbFactorySection _configurationSection;
+		private ProviderSettingsCollection _providerSettings;
 		private readonly string _providerName;
 
-		private DbFactoryProvider _factoryProvider;
+		private DbFactoryProvider<TDataFactoryProviderInterface> _factoryProvider;
 		private object _factoryProviderLock = new object();
 
 		private bool _disposed = false;
@@ -21,13 +22,13 @@ namespace openSourceC.FrameworkLibrary.Data
 		#region Contructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="DbFactoryProviderAccessor&lt;TDataFactoryProxyInterface&gt;"/> class.
+		///		Initializes a new instance of the <see cref="DbFactoryProviderAccessor&lt;TDataFactoryProviderInterface&gt;"/> class.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/> object.</param>
+		/// <param name="providerSettings">The <see cref="ProviderSettingsCollection"/> object.</param>
 		/// <param name="providerName">The name of the provider to create a data factory instance of.</param>
-		public DbFactoryProviderAccessor(DbFactorySection configurationSection, string providerName)
+		public DbFactoryProviderAccessor(ProviderSettingsCollection providerSettings, string providerName)
 		{
-			_configurationSection = configurationSection;
+			_providerSettings = providerSettings;
 			_providerName = providerName;
 		}
 
@@ -87,10 +88,10 @@ namespace openSourceC.FrameworkLibrary.Data
 		#region Protected Properties
 
 		/// <summary>
-		///		Gets the <typeparamref name="TDataFactoryProxyInterface"/> data factory proxy interface of the current
-		///		<see cref="DbFactoryProvider&lt;TRequestContext&gt;"/> instance.
+		///		Gets the <typeparamref name="TDataFactoryProviderInterface"/> data factory proxy interface of the current
+		///		<see cref="DbFactoryProvider&lt;TDataFactoryProviderInterface&gt;"/> instance.
 		/// </summary>
-		protected TDataFactoryProxyInterface DataFactory
+		protected TDataFactoryProviderInterface DataFactory
 		{
 			get
 			{
@@ -100,18 +101,18 @@ namespace openSourceC.FrameworkLibrary.Data
 					{
 						if (_factoryProvider == null)
 						{
-							_factoryProvider = DbFactoryProvider.CreateInstance(_configurationSection, _providerName);
+							_factoryProvider = DbFactoryProvider<TDataFactoryProviderInterface>.CreateInstance(_providerSettings, _providerName);
 						}
 					}
 				}
 
-				return _factoryProvider as TDataFactoryProxyInterface;
+				return _factoryProvider as TDataFactoryProviderInterface;
 			}
 		}
 
 		#endregion
 
-		#region Abstract Methods
+		#region Protected Abstract Methods
 
 		/// <summary>
 		///		Disposes of managed resources.
@@ -127,19 +128,18 @@ namespace openSourceC.FrameworkLibrary.Data
 	}
 
 	/// <summary>
-	///		Summary description for DbFactoryProviderAccessor&lt;TRequestContext, TDataFactoryProxyInterface&gt;.
+	///		Summary description for DbFactoryProviderAccessor&lt;TRequestContext, TDataFactoryProviderInterface&gt;.
 	/// </summary>
-	/// <typeparam name="TRequestContext"></typeparam>
-	/// <typeparam name="TDataFactoryProxyInterface"></typeparam>
-	public abstract class DbFactoryProviderAccessor<TRequestContext, TDataFactoryProxyInterface> : IDisposable
-		where TRequestContext : struct
-		where TDataFactoryProxyInterface : class
+	/// <typeparam name="TUserRequestContext"></typeparam>
+	/// <typeparam name="TDataFactoryProviderInterface"></typeparam>
+	public abstract class DbFactoryProviderAccessor<TUserRequestContext, TDataFactoryProviderInterface> : IDisposable
+		where TUserRequestContext : struct
+		where TDataFactoryProviderInterface : class
 	{
-		private DbFactorySection _configurationSection;
+		private ProviderSettingsCollection _providerSettings;
 		private readonly string _providerName;
-		private TRequestContext _requestContext;
 
-		private DbFactoryProvider<TRequestContext> _factoryProvider;
+		private DbFactoryProvider<TUserRequestContext, TDataFactoryProviderInterface> _factoryProvider;
 		private object _factoryProviderLock = new object();
 
 		private bool _disposed = false;
@@ -148,16 +148,16 @@ namespace openSourceC.FrameworkLibrary.Data
 		#region Contructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="DbFactoryProviderAccessor&lt;TRequestContext, TDataFactoryProxyInterface&gt;"/> class.
+		///		Initializes a new instance of the <see cref="DbFactoryProviderAccessor&lt;TUserRequestContext, TDataFactoryProviderInterface&gt;"/> class.
 		/// </summary>
-		/// <param name="configurationSection">The <see cref="DbFactorySection"/> object.</param>
+		/// <param name="providerSettings">The <see cref="ProviderSettingsCollection"/> object.</param>
 		/// <param name="providerName">The name of the provider to create a data factory instance of.</param>
-		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
-		public DbFactoryProviderAccessor(DbFactorySection configurationSection, string providerName, TRequestContext requestContext)
+		/// <param name="userRequestContext">The current <typeparamref name="TUserRequestContext"/> object.</param>
+		public DbFactoryProviderAccessor(ProviderSettingsCollection providerSettings, string providerName, TUserRequestContext userRequestContext)
 		{
-			_configurationSection = configurationSection;
+			_providerSettings = providerSettings;
 			_providerName = providerName;
-			_requestContext = requestContext;
+			UserRequestContext = userRequestContext;
 		}
 
 		#endregion
@@ -216,10 +216,10 @@ namespace openSourceC.FrameworkLibrary.Data
 		#region Protected Properties
 
 		/// <summary>
-		///		Gets the <typeparamref name="TDataFactoryProxyInterface"/> data factory interface of the current
-		///		<see cref="DbFactoryProvider&lt;TRequestContext&gt;"/> instance.
+		///		Gets the <typeparamref name="TDataFactoryProviderInterface"/> data factory interface of the current
+		///		<see cref="DbFactoryProvider&lt;TUserRequestContext&gt;"/> instance.
 		/// </summary>
-		protected TDataFactoryProxyInterface DataFactory
+		protected TDataFactoryProviderInterface DataFactory
 		{
 			get
 			{
@@ -229,18 +229,21 @@ namespace openSourceC.FrameworkLibrary.Data
 					{
 						if (_factoryProvider == null)
 						{
-							_factoryProvider = DbFactoryProvider<TRequestContext>.CreateInstance(_configurationSection, _providerName, _requestContext);
+							_factoryProvider = DbFactoryProvider<TUserRequestContext, TDataFactoryProviderInterface>.CreateInstance(_providerSettings, _providerName, UserRequestContext);
 						}
 					}
 				}
 
-				return _factoryProvider as TDataFactoryProxyInterface;
+				return _factoryProvider as TDataFactoryProviderInterface;
 			}
 		}
 
+		/// <summary>Gets the current <see cref="T:TUserRequestContext"/> object.</summary>
+		protected TUserRequestContext UserRequestContext { get; private set; }
+
 		#endregion
 
-		#region Abstract Methods
+		#region Protected Abstract Methods
 
 		/// <summary>
 		///		Disposes of managed resources.

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("openSourceC.FrameworkLibrary.Data.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("WGB Enterprises, Inc.")]
+[assembly: AssemblyCompany("WGB Enterprises")]
 [assembly: AssemblyProduct("openSourceC.FrameworkLibrary.Data.Test")]
-[assembly: AssemblyCopyright("Copyright © WGB Enterprises, Inc. 2009")]
+[assembly: AssemblyCopyright("Copyright © WGB Enterprises 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

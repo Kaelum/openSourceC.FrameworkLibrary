@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Security.Permissions;
 using System.Text;
 using System.Web;
 using System.Web.Configuration;
-using System.Web.Util;
 
-using openSourceC.FrameworkLibrary.Common;
 using openSourceC.FrameworkLibrary.Web.Util;
 
 namespace openSourceC.FrameworkLibrary.Web
@@ -175,12 +171,12 @@ namespace openSourceC.FrameworkLibrary.Web
 				switch (ivType)
 				{
 					case IVType.Random:
-						iVRandom = GetIVRandom(useValidationSymAlgo);
-						break;
+					iVRandom = GetIVRandom(useValidationSymAlgo);
+					break;
 
 					case IVType.Hash:
-						iVRandom = GetIVHash(buf, useValidationSymAlgo);
-						break;
+					iVRandom = GetIVHash(buf, useValidationSymAlgo);
+					break;
 				}
 				stream2.Write(iVRandom, 0, iVRandom.Length);
 			}
@@ -615,48 +611,48 @@ namespace openSourceC.FrameworkLibrary.Web
 			switch (decryption)
 			{
 				case "3DES":
-					_sSymAlgoDecryption = new TripleDESCryptoServiceProvider();
-					break;
+				_sSymAlgoDecryption = new TripleDESCryptoServiceProvider();
+				break;
 
 				case "DES":
-					_sSymAlgoDecryption = new DESCryptoServiceProvider();
-					break;
+				_sSymAlgoDecryption = new DESCryptoServiceProvider();
+				break;
 
 				case "AES":
-					_sSymAlgoDecryption = new RijndaelManaged();
-					break;
+				_sSymAlgoDecryption = new RijndaelManaged();
+				break;
 
 				default:
-					if (decryptionKey.Length == 8)
-					{
-						_sSymAlgoDecryption = new DESCryptoServiceProvider();
-					}
-					else
-					{
-						_sSymAlgoDecryption = new RijndaelManaged();
-					}
-					break;
+				if (decryptionKey.Length == 8)
+				{
+					_sSymAlgoDecryption = new DESCryptoServiceProvider();
+				}
+				else
+				{
+					_sSymAlgoDecryption = new RijndaelManaged();
+				}
+				break;
 			}
 
 			switch (_sMachineKeySection.Validation)
 			{
 				case MachineKeyValidation.TripleDES:
-					if (decryptionKey.Length != 8)
-					{
-						_sSymAlgoValidation = new TripleDESCryptoServiceProvider();
-					}
-					else
-					{
-						_sSymAlgoValidation = new DESCryptoServiceProvider();
-					}
-					break;
+				if (decryptionKey.Length != 8)
+				{
+					_sSymAlgoValidation = new TripleDESCryptoServiceProvider();
+				}
+				else
+				{
+					_sSymAlgoValidation = new DESCryptoServiceProvider();
+				}
+				break;
 
 				case MachineKeyValidation.AES:
-					_sSymAlgoValidation = new RijndaelManaged();
-					break;
+				_sSymAlgoValidation = new RijndaelManaged();
+				break;
 
 				default:
-					break;
+				break;
 			}
 
 			if (_sSymAlgoValidation != null)

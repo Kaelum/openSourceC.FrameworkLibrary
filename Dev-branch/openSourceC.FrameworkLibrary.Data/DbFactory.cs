@@ -4,12 +4,6 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text;
-using System.Transactions;
-
-using openSourceC.FrameworkLibrary.Common;
 
 namespace openSourceC.FrameworkLibrary.Data
 {

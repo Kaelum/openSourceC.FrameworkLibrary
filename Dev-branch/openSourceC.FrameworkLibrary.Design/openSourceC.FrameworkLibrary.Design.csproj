@@ -83,9 +83,9 @@
     <Compile Include="Web\UI\Design\WebControls\ContentBlockDesigner.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Common\openSourceC.FrameworkLibrary.Common.csproj">
+    <ProjectReference Include="..\openSourceC.FrameworkLibrary.Core\openSourceC.FrameworkLibrary.Core.csproj">
       <Project>{D5E60952-0F68-4676-A3B5-7BE1E61653E8}</Project>
-      <Name>openSourceC.FrameworkLibrary.Common</Name>
+      <Name>openSourceC.FrameworkLibrary.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\openSourceC.FrameworkLibrary.Web\openSourceC.FrameworkLibrary.Web.csproj">
       <Project>{951A278C-AD4F-42E3-B1BC-C2E56B0D11D2}</Project>

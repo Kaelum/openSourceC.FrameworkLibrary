@@ -1,20 +1,49 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.ServiceProcess;
 
 namespace openSourceC.FrameworkLibrary.ServiceProcess
 {
 	/// <summary>
 	///		Summary description for ServiceApplicationBase.
+	///		<para>Due to a bug in Visual Studio, this class can't be marked abstract as it should
+	///		be if you intend to use the service designer.  Once the bug if fixed, this class
+	///		should be marked abstract.</para>
 	/// </summary>
 	public class ServiceApplicationBase : ServiceBase, IServiceApplicationBase
 	{
 		/// <summary>
-		///		Provides status messages to subscribers.
+		///		Provides messages to subscribers.
 		/// </summary>
-		public event EventHandler<StatusMessageEventArgs> StatusMessage;
+		public event EventHandler<MessageEventArgs> Message;
 
+		/// <summary>
+		///		Gets the <see cref="T:OscLogger"/> object.
+		/// </summary>
+		protected OscLogger Log { get; private set; }
+
+
+		#region Constructors
+
+		/// <summary>
+		///		Constructor
+		///		<para>Due to a bug in Visual Studio, this constructor is required in order for the
+		///		service designer to work.  Once the bug is fixed, this constructor should be
+		///		deleted.</para>
+		/// </summary>
+		public ServiceApplicationBase() { }
+
+		/// <summary>
+		///		Constructor
+		/// </summary>
+		/// <param name="log">The <see cref="T:OscLogger"/> logger to use.</param>
+		public ServiceApplicationBase(OscLogger log)
+		{
+			Log = log;
+			Log.Message += new EventHandler<MessageEventArgs>(OscLogger_Message);
+		}
+
+		#endregion
 
 		#region Explicit IServiceApplicationBase Implementations
 
@@ -90,63 +119,20 @@ namespace openSourceC.FrameworkLibrary.ServiceProcess
 
 		#endregion
 
-		#region Protected Methods
+		#region Event Handlers
 
-		/// <summary>
-		///		
-		/// </summary>
-		/// <param name="statusMessage"></param>
-		protected void OnStatusMessage(string statusMessage)
+		private void OscLogger_Message(object sender, MessageEventArgs e)
 		{
-			if (statusMessage == null)
+			string message = string.Format("{0:MM/dd/yyyy HH:mm:ss tt}: {1}.{2}: {3}", DateTime.Now, e.LocationInfo.ClassName, e.LocationInfo.MethodName, e.Message);
+
+			EventHandler<MessageEventArgs> eventMessageEvent = Message;
+
+			if (eventMessageEvent != null)
 			{
-				throw new ArgumentNullException("statusMessage");
+				eventMessageEvent(this, new MessageEventArgs(e.LocationInfo, e.EventType, message));
 			}
 
-			EventHandler<StatusMessageEventArgs> statusMessageEvent = StatusMessage;
-
-			if (statusMessageEvent != null)
-			{
-				statusMessageEvent(this, new StatusMessageEventArgs(statusMessage));
-			}
-
-			Debug.WriteLine(statusMessage);
-		}
-
-		/// <summary>
-		///		
-		/// </summary>
-		/// <param name="format"></param>
-		/// <param name="args"></param>
-		protected void OnStatusMessage(string format, params object[] args)
-		{
-			if ((format == null) || (args == null))
-			{
-				throw new ArgumentNullException((format == null) ? "format" : "args");
-			}
-
-			OnStatusMessage(string.Format(format, args));
-		}
-
-		/// <summary>
-		///		
-		/// </summary>
-		/// <param name="callingMethod"></param>
-		/// <param name="format"></param>
-		/// <param name="args"></param>
-		protected void OnStatusMessage(MethodBase callingMethod, string format, params object[] args)
-		{
-			if (callingMethod == null)
-			{
-				throw new ArgumentNullException("callingMethod");
-			}
-
-			if ((format == null) || (args == null))
-			{
-				throw new ArgumentNullException((format == null) ? "format" : "args");
-			}
-
-			OnStatusMessage(string.Format("{0:MM/dd/yyyy HH:mm:ss tt}: {1}.{2}: {3}", DateTime.Now, callingMethod.ReflectedType.Name, callingMethod.Name, string.Format(format, args)));
+			Debug.WriteLine(message);
 		}
 
 		#endregion

@@ -20,7 +20,7 @@ namespace SampleApp
 			item.PrimaryKey1 = 2;
 			item.DataString = "data";
 
-			object[] key = item.GetKey();
+			object[] key = item.GetKeyValues();
 		}
 	}
 }
