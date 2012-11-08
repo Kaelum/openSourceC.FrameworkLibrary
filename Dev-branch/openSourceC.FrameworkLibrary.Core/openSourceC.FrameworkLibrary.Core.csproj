@@ -83,11 +83,11 @@
     <Compile Include="Configuration\SettingSettingsCollection.cs" />
     <Compile Include="Core\Enumerators.cs" />
     <Compile Include="Core\HexConvert.cs" />
-    <Compile Include="Core\Encryption.cs"/>
-    <Compile Include="Core\Exceptions\Exceptions.cs"/>
-    <Compile Include="Core\Format.cs"/>
-    <Compile Include="Core\Impersonation.cs"/>
-    <Compile Include="Core\Parse.cs"/>
+    <Compile Include="Core\Encryption.cs" />
+    <Compile Include="Core\Exceptions\Exceptions.cs" />
+    <Compile Include="Core\Format.cs" />
+    <Compile Include="Core\Impersonation.cs" />
+    <Compile Include="Core\Parse.cs" />
     <Compile Include="Core\ReturnObject.cs" />
     <Compile Include="Core\SR.cs" />
     <Compile Include="Core\SR.Designer.cs">
@@ -137,6 +137,9 @@
       <LastGenOutput>SR.Designer.cs</LastGenOutput>
       <CustomToolNamespace>openSourceC.FrameworkLibrary</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="License.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

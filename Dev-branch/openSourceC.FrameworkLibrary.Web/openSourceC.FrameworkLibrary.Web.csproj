@@ -160,6 +160,7 @@
     <EmbeddedResource Include="Web\Resources\ExpandCollapse.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="License.html" />
     <Content Include="Web\Resources\ContentBlock.ico" />
   </ItemGroup>
   <ItemGroup>
