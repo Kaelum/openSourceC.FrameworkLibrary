@@ -57,12 +57,12 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 	}
 
 	/// <summary>
-	///		Summary description for AbstractProxyProvider&lt;TUserRequestContext, TProxyInterface&gt;.
+	///		Summary description for AbstractProxyProvider&lt;TRequestContext, TProxyInterface&gt;.
 	/// </summary>
-	/// <typeparam name="TUserRequestContext">The <typeparamref name="TUserRequestContext"/> type.</typeparam>
+	/// <typeparam name="TRequestContext">The <typeparamref name="TRequestContext"/> type.</typeparam>
 	/// <typeparam name="TProxyInterface">The <typeparamref name="TProxyInterface"/> type.</typeparam>
-	public abstract class AbstractProxyProvider<TUserRequestContext, TProxyInterface> : AbstractProxyProviderBase
-		where TUserRequestContext : struct
+	public abstract class AbstractProxyProvider<TRequestContext, TProxyInterface> : AbstractProxyProviderBase
+		where TRequestContext : struct
 		where TProxyInterface : class
 	{
 		private TProxyInterface _provider;
@@ -72,13 +72,13 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 		#region Constructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="AbstractProxyProvider&lt;TUserRequestContext, TProxyInterface&gt;"/>
+		///		Initializes a new instance of the <see cref="AbstractProxyProvider&lt;TRequestContext, TProxyInterface&gt;"/>
 		///		class. 
 		/// </summary>
 		/// <param name="settings">The <see cref="ProviderSettings"/> object.</param>
-		/// <param name="userRequestContext">The current <typeparamref name="TUserRequestContext"/> object.</param>
-		protected AbstractProxyProvider(ProviderSettings settings, TUserRequestContext userRequestContext)
-			: base(settings) { UserRequestContext = userRequestContext; }
+		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
+		protected AbstractProxyProvider(ProviderSettings settings, TRequestContext requestContext)
+			: base(settings) { RequestContext = requestContext; }
 
 		#endregion
 
@@ -98,7 +98,7 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 					{
 						if (_provider == null)
 						{
-							_provider = AbstractProvider.Create<TProxyInterface>(Settings, UserRequestContext);
+							_provider = AbstractProvider.Create<TProxyInterface>(Settings, RequestContext);
 						}
 					}
 				}
@@ -107,8 +107,8 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 			}
 		}
 
-		/// <summary>Gets the current <see cref="T:TUserRequestContext"/> object.</summary>
-		protected TUserRequestContext UserRequestContext { get; private set; }
+		/// <summary>Gets the current <see cref="T:TRequestContext"/> object.</summary>
+		protected TRequestContext RequestContext { get; private set; }
 
 		#endregion
 	}
@@ -168,7 +168,7 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 
 		#endregion
 
-		#region IDisposable Implmentation
+		#region IDisposable Implementation
 
 		/// <summary></summary>
 		protected bool Disposed { get; private set; }

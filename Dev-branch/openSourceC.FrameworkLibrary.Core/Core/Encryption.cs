@@ -17,6 +17,8 @@ namespace openSourceC.FrameworkLibrary
 	/// </summary>
 	public static class Encryption
 	{
+		#region Constructors
+
 		/// <summary>
 		///		Class constructor.
 		/// </summary>
@@ -44,7 +46,9 @@ namespace openSourceC.FrameworkLibrary
 
 				// If the bug exists, the exception will be thrown.
 				if (!testString.Equals(decrypted))
+				{
 					throw new ApplicationException(".NET Framework encryption bug detected and handled.");
+				}
 			}
 			catch (ApplicationException ex)
 			{
@@ -54,10 +58,14 @@ namespace openSourceC.FrameworkLibrary
 			catch (OscException) { }
 			catch (Exception ex)
 			{
-				// An unexpected exception has occured.
-				Debug.WriteLine(Format.Exception(ex, "An unexpected exception has occured."));
+				// An unexpected exception has occurred.
+				Debug.WriteLine(Format.Exception(ex, "An unexpected exception has occurred."));
 			}
 		}
+
+		#endregion
+
+		#region Decrypt
 
 		/// <summary>
 		///		Decrypts the data written to the <see cref="CryptoStream"/> within the delegate
@@ -106,7 +114,7 @@ namespace openSourceC.FrameworkLibrary
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-				throw new OscErrorException("An unexpected exception has occured.", ex);
+				throw new OscErrorException("An unexpected exception has occurred.", ex);
 			}
 		}
 
@@ -144,7 +152,7 @@ namespace openSourceC.FrameworkLibrary
 		public static string DecryptFromBase64String<TSymmetricAlgorithm>(string buffer, byte[] key, byte[] iv)
 			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
 		{
-			return (new UTF8Encoding()).GetString(DecryptFromBase64String<TSymmetricAlgorithm>(null, buffer, key, iv));
+			return Encoding.UTF8.GetString(DecryptFromBase64String<TSymmetricAlgorithm>(null, buffer, key, iv));
 		}
 
 		/// <summary>
@@ -181,9 +189,13 @@ namespace openSourceC.FrameworkLibrary
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-				throw new OscErrorException("An unexpected exception has occured.", ex);
+				throw new OscErrorException("An unexpected exception has occurred.", ex);
 			}
 		}
+
+		#endregion
+
+		#region Encrypt
 
 		/// <summary>
 		///		Encrypts the specified string with the specified key and initialization vector.
@@ -216,7 +228,7 @@ namespace openSourceC.FrameworkLibrary
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-				throw new OscErrorException("An unexpected exception has occured.", ex);
+				throw new OscErrorException("An unexpected exception has occurred.", ex);
 			}
 		}
 
@@ -267,7 +279,7 @@ namespace openSourceC.FrameworkLibrary
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-				throw new OscErrorException("An unexpected exception has occured.", ex);
+				throw new OscErrorException("An unexpected exception has occurred.", ex);
 			}
 		}
 
@@ -314,7 +326,7 @@ namespace openSourceC.FrameworkLibrary
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-				throw new OscErrorException("An unexpected exception has occured.", ex);
+				throw new OscErrorException("An unexpected exception has occurred.", ex);
 			}
 		}
 
@@ -344,15 +356,17 @@ namespace openSourceC.FrameworkLibrary
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-				throw new OscErrorException("An unexpected exception has occured.", ex);
+				throw new OscErrorException("An unexpected exception has occurred.", ex);
 			}
 		}
+
+		#endregion
 
 		#region Private Methods
 
 		private static void WriteStringToCryptoStream(CryptoStream cryptoStream, string buffer)
 		{
-			byte[] byteArray = (new UTF8Encoding()).GetBytes(buffer);
+			byte[] byteArray = Encoding.UTF8.GetBytes(buffer);
 			cryptoStream.Write(byteArray, 0, byteArray.Length);
 		}
 

@@ -19,28 +19,28 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 	}
 
 	/// <summary>
-	///		Summary description for AbstractAccessPointProvider&lt;TUserRequestContext&gt;.
+	///		Summary description for AbstractAccessPointProvider&lt;TRequestContext&gt;.
 	/// </summary>
-	/// <typeparam name="TUserRequestContext">The <typeparamref name="TUserRequestContext"/> type.</typeparam>
-	public abstract class AbstractAccessPointProvider<TUserRequestContext> : AbstractAccessPointProviderBase
-		where TUserRequestContext : struct
+	/// <typeparam name="TRequestContext">The <typeparamref name="TRequestContext"/> type.</typeparam>
+	public abstract class AbstractAccessPointProvider<TRequestContext> : AbstractAccessPointProviderBase
+		where TRequestContext : struct
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="AbstractAccessPointProvider&lt;TUserRequestContext&gt;"/>
+		///		Initializes a new instance of the <see cref="AbstractAccessPointProvider&lt;TRequestContext&gt;"/>
 		///		class. 
 		/// </summary>
-		/// <param name="userRequestContext">The current <typeparamref name="TUserRequestContext"/> object.</param>
-		protected AbstractAccessPointProvider(TUserRequestContext userRequestContext)
-			: base() { UserRequestContext = userRequestContext; }
+		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
+		protected AbstractAccessPointProvider(TRequestContext requestContext)
+			: base() { RequestContext = requestContext; }
 
 		#endregion
 
 		#region Protected Properties
 
-		/// <summary>Gets the current <see cref="T:TUserRequestContext"/> object.</summary>
-		protected TUserRequestContext UserRequestContext { get; private set; }
+		/// <summary>Gets the current <see cref="T:TRequestContext"/> object.</summary>
+		protected TRequestContext RequestContext { get; private set; }
 
 		#endregion
 	}
@@ -75,7 +75,7 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 
 		#endregion
 
-		#region IDisposable Implmentation
+		#region IDisposable Implementation
 
 		/// <summary></summary>
 		protected bool Disposed { get; private set; }

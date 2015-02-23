@@ -26,29 +26,29 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 	}
 
 	/// <summary>
-	///		Summary description for AbstractProvider&lt;TUserRequestContext&gt;.
+	///		Summary description for AbstractProvider&lt;TRequestContext&gt;.
 	/// </summary>
-	/// <typeparam name="TUserRequestContext">The <typeparamref name="TUserRequestContext"/> type.</typeparam>
-	public abstract class AbstractProvider<TUserRequestContext> : AbstractProviderBase
-		where TUserRequestContext : struct
+	/// <typeparam name="TRequestContext">The <typeparamref name="TRequestContext"/> type.</typeparam>
+	public abstract class AbstractProvider<TRequestContext> : AbstractProviderBase
+		where TRequestContext : struct
 	{
 		#region Constructors
 
 		/// <summary>
-		///		Initializes a new instance of the <see cref="AbstractProvider&lt;TUserRequestContext&gt;"/>
+		///		Initializes a new instance of the <see cref="AbstractProvider&lt;TRequestContext&gt;"/>
 		///		class. 
 		/// </summary>
 		/// <param name="settings">The <see cref="SettingSettings"/> object.</param>
-		/// <param name="userRequestContext">The current <typeparamref name="TUserRequestContext"/> object.</param>
-		protected AbstractProvider(SettingSettings settings, TUserRequestContext userRequestContext)
-			: base(settings) { UserRequestContext = userRequestContext; }
+		/// <param name="requestContext">The current <typeparamref name="TRequestContext"/> object.</param>
+		protected AbstractProvider(SettingSettings settings, TRequestContext requestContext)
+			: base(settings) { RequestContext = requestContext; }
 
 		#endregion
 
 		#region Protected Properties
 
-		/// <summary>Gets the current <see cref="T:TUserRequestContext"/> object.</summary>
-		protected TUserRequestContext UserRequestContext { get; private set; }
+		/// <summary>Gets the current <see cref="T:TRequestContext"/> object.</summary>
+		protected TRequestContext RequestContext { get; private set; }
 
 		#endregion
 	}
@@ -108,7 +108,7 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 
 		#endregion
 
-		#region IDisposable Implmentation
+		#region IDisposable Implementation
 
 		/// <summary></summary>
 		protected bool Disposed { get; private set; }
@@ -122,7 +122,6 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 
 			GC.SuppressFinalize(this);
 		}
-
 
 		/// <summary>
 		///		Dispose(bool disposing) executes in two distinct scenarios.  If disposing equals
@@ -179,9 +178,9 @@ namespace openSourceC.FrameworkLibrary.Abstraction
 
 			if (providerSettings.ElementInformation != null && providerSettings.ElementInformation.Properties != null)
 			{
-				foreach (string key in providerSettings.ElementInformation.Properties.Keys)
+				foreach (PropertyInformation pi in providerSettings.ElementInformation.Properties)
 				{
-					try { Debug.WriteLine(string.Format("\tProperty: {0} = {1}", key, providerSettings.ElementInformation.Properties[key])); }
+					try { Debug.WriteLine(string.Format("\tProperty: {0} = {1}", pi.Name, pi.Value)); }
 					catch { }
 				}
 			}

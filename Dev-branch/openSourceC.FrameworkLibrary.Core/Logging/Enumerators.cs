@@ -3,19 +3,19 @@
 namespace openSourceC.FrameworkLibrary
 {
 	/// <summary>
-	///		Identifies the type of event that has caused the message.
+	///		Identifies the type of message log entry.
 	/// </summary>
 	[Serializable]
-	public enum LogEventType
+	public enum MessageLogEntryType
 	{
-		/// <summary>Fatal error or application crash.</summary>
-		Critical,
-
 		/// <summary>Debugging trace.</summary>
 		Debug,
 
 		/// <summary>Recoverable error.</summary>
 		Error,
+
+		/// <summary>Fatal error or application crash.</summary>
+		Fatal,
 
 		/// <summary>Informational message.</summary>
 		Information,
@@ -37,27 +37,5 @@ namespace openSourceC.FrameworkLibrary
 
 		/// <summary>Noncritical problem.</summary>
 		Warning,
-	}
-
-	/// <summary>
-	///		Specifies the message level to log.
-	/// </summary>
-	[Serializable]
-	public enum LogLevel
-	{
-		/// <summary>Do not log any messages.</summary>
-		Off = 0,
-
-		/// <summary>Log error-handling messages.</summary>
-		Error = 1,
-
-		/// <summary>Log warnings and error-handling messages.</summary>
-		Warning = 2,
-
-		/// <summary>Log informational messages, warnings, and error-handling messages.</summary>
-		Info = 3,
-
-		/// <summary>Log all debugging and tracing messages.</summary>
-		Verbose = 4,
 	}
 }
