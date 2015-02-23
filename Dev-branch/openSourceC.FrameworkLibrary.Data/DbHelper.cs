@@ -205,7 +205,12 @@ namespace openSourceC.FrameworkLibrary.Data
 							execString.Append(",");
 						}
 
-						if (prm.Value == null || prm.Value == DBNull.Value)
+						if (
+							prm.Value == null
+							|| prm.Value == DBNull.Value
+							|| (prm.Value is SqlXml && ((SqlXml)prm.Value).IsNull)
+							|| prm.Direction.Equals(ParameterDirection.Output)
+						)
 						{
 							prmValue = "NULL";
 						}
@@ -445,7 +450,7 @@ namespace openSourceC.FrameworkLibrary.Data
 
 								case SqlDbType.NVarChar:
 								{
-									varType = string.Format("nvarchar({0})", prm.Size);
+									varType = string.Format("nvarchar({0})", ParameterSizeToString(prm.Size));
 									break;
 								}
 
@@ -522,13 +527,13 @@ namespace openSourceC.FrameworkLibrary.Data
 
 								case SqlDbType.VarBinary:
 								{
-									varType = string.Format("varbinary({0})", prm.Size);
+									varType = string.Format("varbinary({0})", ParameterSizeToString(prm.Size));
 									break;
 								}
 
 								case SqlDbType.VarChar:
 								{
-									varType = string.Format("varchar({0})", prm.Size);
+									varType = string.Format("varchar({0})", ParameterSizeToString(prm.Size));
 									break;
 								}
 
@@ -576,5 +581,19 @@ namespace openSourceC.FrameworkLibrary.Data
 
 			return string.Format("{0}\n{1}{2};\n\n{3}", declareString.ToString(), setString.ToString(), execString.ToString(), printString.ToString());
 		}
+
+		#region Private Methods
+
+		private static string ParameterSizeToString(int parameterSize)
+		{
+			if (parameterSize == int.MaxValue)
+			{
+				return "max";
+			}
+
+			return parameterSize.ToString();
+		}
+
+		#endregion
 	}
 }

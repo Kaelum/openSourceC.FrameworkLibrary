@@ -185,10 +185,18 @@ namespace openSourceC.FrameworkLibrary
 
 				strBuilder.AppendFormat(": {0}{2}{1}", message, stackTrace, Environment.NewLine);
 
-				if (e is System.Data.SqlClient.SqlException)
+				if (e is OscException)
+				{
+					OscException ex = (OscException)e;
+
+					if (!string.IsNullOrWhiteSpace(ex.ExtendedMessage))
+					{
+						strBuilder.AppendFormat("{0}Extended Message:{0}{1}", Environment.NewLine, ex.ExtendedMessage);
+					}
+				}
+				else if (e is System.Data.SqlClient.SqlException)
 				{
 					System.Data.SqlClient.SqlException ex = (System.Data.SqlClient.SqlException)e;
-
 
 					strBuilder.AppendFormat("{0}SQL Errors:{0}", Environment.NewLine);
 

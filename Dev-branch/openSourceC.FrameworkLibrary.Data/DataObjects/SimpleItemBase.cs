@@ -103,8 +103,21 @@ namespace openSourceC.FrameworkLibrary.Data
 				if (Attribute.GetCustomAttribute(pi, typeof(KeyAttribute)) != null)
 				{
 					DisplayAttribute columnAttribute = (DisplayAttribute)Attribute.GetCustomAttribute(pi, typeof(DisplayAttribute));
+					int key = (columnAttribute == null ? -1 : columnAttribute.Order);
 
-					keyProperties.Add(columnAttribute == null ? -1 : columnAttribute.Order, pi);
+					if (keyProperties.ContainsKey(key))
+					{
+						if (columnAttribute == null)
+						{
+							throw new OscErrorException("Multiple KeyAttributes defined, DisplayAttribute Order is required.");
+						}
+						else
+						{
+							throw new OscErrorException("Duplicate DisplayAttribute Order value.");
+						}
+					}
+
+					keyProperties.Add(key, pi);
 				}
 
 				//keyProperties.Add(new KeyColumnAttributes() { Key = keyAttribute, Column = (DisplayAttribute)Attribute.GetCustomAttribute(pi, typeof(DisplayAttribute)) });

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
 using System.ServiceProcess;
+using System.Xml;
 
 namespace openSourceC.FrameworkLibrary.ServiceProcess
 {
 	/// <summary>
 	///		Summary description for ServiceApplicationBase.
-	///		<para>Due to a bug in Visual Studio, this class can't be marked abstract as it should
-	///		be if you intend to use the service designer.  Once the bug if fixed, this class
-	///		should be marked abstract.</para>
 	/// </summary>
+	///	<remarks>
+	///		DUE TO A BUG IN VISUAL STUDIO, THIS CLASS CAN'T BE MARKED ABSTRACT AS IT SHOULD BE IF
+	///		YOU INTEND TO USE THE SERVICE DESIGNER.  ONCE THE BUG IF FIXED, THIS CLASS SHOULD BE
+	///		MARKED ABSTRACT.
+	///	</remarks>
 	public class ServiceApplicationBase : ServiceBase, IServiceApplicationBase
 	{
 		/// <summary>
@@ -17,31 +20,62 @@ namespace openSourceC.FrameworkLibrary.ServiceProcess
 		/// </summary>
 		public event EventHandler<MessageEventArgs> Message;
 
-		/// <summary>
-		///		Gets the <see cref="T:OscLogger"/> object.
-		/// </summary>
-		protected OscLogger Log { get; private set; }
+		/// <summary>Gets the <see cref="T:OscLog"/> object.</summary>
+		protected OscLog Log { get; private set; }
 
 
 		#region Constructors
 
 		/// <summary>
-		///		Constructor
-		///		<para>Due to a bug in Visual Studio, this constructor is required in order for the
-		///		service designer to work.  Once the bug is fixed, this constructor should be
-		///		deleted.</para>
+		///		DO NOT USE THIS CONSTRUCTOR!
 		/// </summary>
+		///	<remarks>
+		///		DUE TO A BUG IN VISUAL STUDIO, THIS CONSTRUCTOR IS REQUIRED IN ORDER FOR THE SERVICE
+		///		DESIGNER TO WORK.  ONCE THE BUG IS FIXED, THIS CONSTRUCTOR SHOULD BE DELETED.
+		///	</remarks>
+		[Obsolete("Use of this constructor is not supported.", true)]
 		public ServiceApplicationBase() { }
 
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		/// <param name="log">The <see cref="T:OscLogger"/> logger to use.</param>
-		public ServiceApplicationBase(OscLogger log)
+		/// <param name="log">The <see cref="T:OscLog"/> log to use.</param>
+		public ServiceApplicationBase(OscLog log)
 		{
 			Log = log;
-			Log.Message += new EventHandler<MessageEventArgs>(OscLogger_Message);
+
+			// Forward messages from the logger to the Message event.
+			Log.Message += new EventHandler<MessageEventArgs>(
+				delegate(object sender, MessageEventArgs e)
+				{
+					string message = e.ToString();
+
+					EventHandler<MessageEventArgs> eventMessageEvent = Message;
+
+					if (eventMessageEvent != null)
+					{
+						eventMessageEvent(this, new MessageEventArgs(e.LocationInfo, e.MessageLogEntryType, message));
+					}
+
+					Debug.WriteLine(message);
+				}
+			);
 		}
+
+		/// <summary>
+		///		Constructor
+		/// </summary>
+		/// <param name="loggerName">The name of the logger to use.</param>
+		public ServiceApplicationBase(string loggerName)
+			: this(new OscLog(loggerName)) { }
+
+		/// <summary>
+		///		Constructor
+		/// </summary>
+		/// <param name="log4netConfigurationXml">The log4net configuration xml element.</param>
+		/// <param name="loggerName">The name of the logger to use.</param>
+		public ServiceApplicationBase(XmlElement log4netConfigurationXml, string loggerName)
+			: this(new OscLog(log4netConfigurationXml, loggerName)) { }
 
 		#endregion
 
@@ -115,24 +149,6 @@ namespace openSourceC.FrameworkLibrary.ServiceProcess
 		void IServiceApplicationBase.ExecuteOnStop()
 		{
 			OnStop();
-		}
-
-		#endregion
-
-		#region Event Handlers
-
-		private void OscLogger_Message(object sender, MessageEventArgs e)
-		{
-			string message = string.Format("{0:MM/dd/yyyy HH:mm:ss tt}: {1}.{2}: {3}", DateTime.Now, e.LocationInfo.ClassName, e.LocationInfo.MethodName, e.Message);
-
-			EventHandler<MessageEventArgs> eventMessageEvent = Message;
-
-			if (eventMessageEvent != null)
-			{
-				eventMessageEvent(this, new MessageEventArgs(e.LocationInfo, e.EventType, message));
-			}
-
-			Debug.WriteLine(message);
 		}
 
 		#endregion

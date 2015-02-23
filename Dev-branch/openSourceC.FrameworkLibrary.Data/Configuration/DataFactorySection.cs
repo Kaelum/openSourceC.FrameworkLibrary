@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Configuration;
 
-using openSourceC.FrameworkLibrary.Data;
-
 namespace openSourceC.FrameworkLibrary.Configuration
 {
 	/// <summary>
@@ -10,44 +8,45 @@ namespace openSourceC.FrameworkLibrary.Configuration
 	/// </summary>
 	public class DataFactorySection : DbFactorySectionBase
 	{
-		/// <summary>Gets the configuration file section name.</summary>
-		public static string SectionName { get; private set; }
-
 		private static DataFactorySection _configSection = null;
+		private static bool? _isRunningUnderIIS = null;
 		private static object _configSectionLock = new object();
 
 
-		#region Constructors
-
-		/// <summary>
-		///		Constructor.
-		/// </summary>
-		static DataFactorySection() { SectionName = "openSourceC/dataFactory"; }
-
-		#endregion
-
-		#region Instance
+		#region GetInstance
 
 		/// <summary>
 		///		Gets the singleton instance of <see cref="DataFactorySection"/>.
 		/// </summary>
-		public static DataFactorySection Instance
+		/// <param name="isRunningUnderIIS"><b>true</b> if the application is running under IIS
+		///		application (Web.config); otherwise, <b>false</b> (App.config).</param>
+		///	<returns>
+		///		A <see cref="T:DataFactorySection"/> object.
+		///	</returns>
+		public static DataFactorySection GetInstance(bool isRunningUnderIIS)
 		{
-			get
+			if (_configSection == null)
 			{
-				if (_configSection == null)
+				lock (_configSectionLock)
 				{
-					lock (_configSectionLock)
+					if (_configSection == null)
 					{
+						_configSection = ConfigurationSectionManager.GetConfigurationSection<DataFactorySection>(isRunningUnderIIS);
+						_isRunningUnderIIS = isRunningUnderIIS;
+
 						if (_configSection == null)
 						{
-							_configSection = (DataFactorySection)ConfigurationManager.GetSection(SectionName);
+							throw new ConfigurationErrorsException(string.Format("Configuration section for type=\"{0}\" not found.", typeof(DataFactorySection).FullName));
 						}
 					}
 				}
-
-				return _configSection;
 			}
+			else if (_isRunningUnderIIS != isRunningUnderIIS)
+			{
+				throw new ConfigurationErrorsException("The isRunningUnderIIS parameter does not match the value used to create the instance.");
+			}
+
+			return _configSection;
 		}
 
 		#endregion

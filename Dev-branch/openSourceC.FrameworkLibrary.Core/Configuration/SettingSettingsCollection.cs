@@ -9,7 +9,7 @@ namespace openSourceC.FrameworkLibrary.Configuration
 	[ConfigurationCollection(typeof(SettingSettings))]
 	public sealed class SettingSettingsCollection : ConfigurationElementCollection
 	{
-		#region Contructors
+		#region Constructors
 
 		/// <summary>
 		///		Creates a new instance of a <see cref="T:SettingSettingsCollection"/> class.

@@ -46,21 +46,27 @@ namespace openSourceC.FrameworkLibrary
 					switch (fieldType)
 					{
 						case FieldType.Alphanumeric:
-						if (closeQuotePos == -1)
 						{
-							throw new ApplicationException(string.Format("Import detail.LineText {0}: closing double-quote not found.", detail.LineNo));
+							if (closeQuotePos == -1)
+							{
+								throw new ApplicationException(string.Format("Import detail.LineText {0}: closing double-quote not found.", detail.LineNo));
+							}
+
+							fieldValue = detail.LineText.Substring(openQuotePos + 1, closeQuotePos - openQuotePos - 1).Replace("\"\"", "\"").Trim();
+							break;
 						}
 
-						fieldValue = detail.LineText.Substring(openQuotePos + 1, closeQuotePos - openQuotePos - 1).Replace("\"\"", "\"").Trim();
-						break;
-
 						case FieldType.Numeric:
-						fieldValue = detail.LineText.Substring(lastCommaPos + 1, i - lastCommaPos - 1).Trim();
-						break;
+						{
+							fieldValue = detail.LineText.Substring(lastCommaPos + 1, i - lastCommaPos - 1).Trim();
+							break;
+						}
 
 						default:
-						fieldValue = null;
-						break;
+						{
+							fieldValue = null;
+							break;
+						}
 					}
 
 					populateDetailField(detail, importVersion, currentField, fieldValue);
@@ -451,19 +457,11 @@ namespace openSourceC.FrameworkLibrary
 		/// <summary>
 		///		Gets or sets the line number of the import file.
 		/// </summary>
-		int LineNo
-		{
-			get;
-			set;
-		}
+		int LineNo { get; set; }
 
 		/// <summary>
 		///		Gets or sets the line of text from the import file.
 		/// </summary>
-		string LineText
-		{
-			get;
-			set;
-		}
+		string LineText { get; set; }
 	}
 }

@@ -9,11 +9,14 @@ namespace openSourceC.FrameworkLibrary
 	[Serializable]
 	public class MessageEventArgs : EventArgs
 	{
+		/// <summary>Gets the Event Log event object.</summary>
+		public EventLogEvent EventLogEvent { get; private set; }
+
 		/// <summary>Gets the calling method.</summary>
 		public LocationInfo LocationInfo { get; private set; }
 
-		/// <summary>Gets the event type.</summary>
-		public LogEventType EventType { get; private set; }
+		/// <summary>Gets the log entry type.</summary>
+		public MessageLogEntryType MessageLogEntryType { get; private set; }
 
 		/// <summary>Gets the message.</summary>
 		public string Message { get; private set; }
@@ -25,33 +28,86 @@ namespace openSourceC.FrameworkLibrary
 		///		Constructor.
 		/// </summary>
 		/// <param name="locationInfo"></param>
-		/// <param name="eventType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="exception"></param>
+		public MessageEventArgs(LocationInfo locationInfo, MessageLogEntryType messageLogEntryType, Exception exception)
+			: this(locationInfo, messageLogEntryType, null, exception) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="locationInfo"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="exception"></param>
 		/// <param name="provider"></param>
 		/// <param name="format"></param>
 		/// <param name="args"></param>
-		public MessageEventArgs(LocationInfo locationInfo, LogEventType eventType, IFormatProvider provider, string format, params object[] args)
-			: this(locationInfo, eventType, string.Format(provider, format, args)) { }
+		public MessageEventArgs(LocationInfo locationInfo, MessageLogEntryType messageLogEntryType, Exception exception, IFormatProvider provider, string format, params object[] args)
+			: this(locationInfo, messageLogEntryType, string.Format(provider, format, args), exception) { }
 
 		/// <summary>
 		///		Constructor.
 		/// </summary>
 		/// <param name="locationInfo"></param>
-		/// <param name="eventType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="exception"></param>
 		/// <param name="format"></param>
 		/// <param name="args"></param>
-		public MessageEventArgs(LocationInfo locationInfo, LogEventType eventType, string format, params object[] args)
-			: this(locationInfo, eventType, null, format, args) { }
+		public MessageEventArgs(LocationInfo locationInfo, MessageLogEntryType messageLogEntryType, Exception exception, string format, params object[] args)
+			: this(locationInfo, messageLogEntryType, exception, null, format, args) { }
 
 		/// <summary>
 		///		Constructor.
 		/// </summary>
 		/// <param name="locationInfo"></param>
-		/// <param name="eventType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="provider"></param>
+		/// <param name="format"></param>
+		/// <param name="args"></param>
+		public MessageEventArgs(LocationInfo locationInfo, MessageLogEntryType messageLogEntryType, IFormatProvider provider, string format, params object[] args)
+			: this(locationInfo, messageLogEntryType, string.Format(provider, format, args)) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="locationInfo"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="format"></param>
+		/// <param name="args"></param>
+		public MessageEventArgs(LocationInfo locationInfo, MessageLogEntryType messageLogEntryType, string format, params object[] args)
+			: this(locationInfo, messageLogEntryType, (IFormatProvider)null, format, args) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="locationInfo"></param>
+		/// <param name="messageLogEntryType"></param>
 		/// <param name="message"></param>
-		public MessageEventArgs(LocationInfo locationInfo, LogEventType eventType, string message)
+		public MessageEventArgs(LocationInfo locationInfo, MessageLogEntryType messageLogEntryType, string message)
+			: this(locationInfo, messageLogEntryType, message, (Exception)null) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="locationInfo"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="message"></param>
+		/// <param name="exception"></param>
+		public MessageEventArgs(LocationInfo locationInfo, MessageLogEntryType messageLogEntryType, string message, Exception exception)
 		{
+			if (exception == null)
+			{
+				EventLogEvent = new EventLogEvent(message, EventLogEvent.GetEventLogEntryType(messageLogEntryType));
+			}
+			else
+			{
+				EventLogEvent = new EventLogEvent(exception, message);
+			}
+
+			EventLogEvent.LocationInfo = locationInfo;
+
 			LocationInfo = locationInfo;
-			EventType = eventType;
+			MessageLogEntryType = messageLogEntryType;
 			Message = message;
 		}
 
@@ -59,31 +115,88 @@ namespace openSourceC.FrameworkLibrary
 		///		Constructor.
 		/// </summary>
 		/// <param name="callerType"></param>
-		/// <param name="eventType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="exception"></param>
+		public MessageEventArgs(Type callerType, MessageLogEntryType messageLogEntryType, Exception exception)
+			: this(callerType, messageLogEntryType, null, exception) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="callerType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="exception"></param>
 		/// <param name="provider"></param>
 		/// <param name="format"></param>
 		/// <param name="args"></param>
-		public MessageEventArgs(Type callerType, LogEventType eventType, IFormatProvider provider, string format, params object[] args)
-			: this(callerType, eventType, string.Format(provider, format, args)) { }
+		public MessageEventArgs(Type callerType, MessageLogEntryType messageLogEntryType, Exception exception, IFormatProvider provider, string format, params object[] args)
+			: this(callerType, messageLogEntryType, string.Format(provider, format, args), exception) { }
 
 		/// <summary>
 		///		Constructor.
 		/// </summary>
 		/// <param name="callerType"></param>
-		/// <param name="eventType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="exception"></param>
 		/// <param name="format"></param>
 		/// <param name="args"></param>
-		public MessageEventArgs(Type callerType, LogEventType eventType, string format, params object[] args)
-			: this(callerType, eventType, null, format, args) { }
+		public MessageEventArgs(Type callerType, MessageLogEntryType messageLogEntryType, Exception exception, string format, params object[] args)
+			: this(callerType, messageLogEntryType, exception, null, format, args) { }
 
 		/// <summary>
 		///		Constructor.
 		/// </summary>
 		/// <param name="callerType"></param>
-		/// <param name="eventType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="provider"></param>
+		/// <param name="format"></param>
+		/// <param name="args"></param>
+		public MessageEventArgs(Type callerType, MessageLogEntryType messageLogEntryType, IFormatProvider provider, string format, params object[] args)
+			: this(callerType, messageLogEntryType, string.Format(provider, format, args)) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="callerType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="format"></param>
+		/// <param name="args"></param>
+		public MessageEventArgs(Type callerType, MessageLogEntryType messageLogEntryType, string format, params object[] args)
+			: this(callerType, messageLogEntryType, (IFormatProvider)null, format, args) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="callerType"></param>
+		/// <param name="messageLogEntryType"></param>
 		/// <param name="message"></param>
-		public MessageEventArgs(Type callerType, LogEventType eventType, string message)
-			: this(new LocationInfo(callerType), eventType, message) { }
+		public MessageEventArgs(Type callerType, MessageLogEntryType messageLogEntryType, string message)
+			: this(new LocationInfo(callerType), messageLogEntryType, message) { }
+
+		/// <summary>
+		///		Constructor.
+		/// </summary>
+		/// <param name="callerType"></param>
+		/// <param name="messageLogEntryType"></param>
+		/// <param name="message"></param>
+		/// <param name="exception"></param>
+		public MessageEventArgs(Type callerType, MessageLogEntryType messageLogEntryType, string message, Exception exception)
+			: this(new LocationInfo(callerType), messageLogEntryType, message, exception) { }
+
+		#endregion
+
+		#region ToString()
+
+		/// <summary>
+		///		Returns a string representing the current object using a default message format.
+		/// </summary>
+		/// <returns>
+		///		A string representing the current object using a default message format.
+		/// </returns>
+		public override string ToString()
+		{
+			return string.Format("{0:MM/dd/yyyy HH:mm:ss.fff tt}: {1}.{2}:{3}: {4}", DateTime.Now, LocationInfo.ClassName, LocationInfo.MethodName, LocationInfo.LineNumber, Message);
+		}
 
 		#endregion
 	}

@@ -12,24 +12,22 @@ namespace openSourceC.FrameworkLibrary.Data
 	/// </summary>
 	/// <typeparam name="TDbFactory"></typeparam>
 	/// <typeparam name="TDbFactoryCommand"></typeparam>
-	/// <typeparam name="TParamsHelper"></typeparam>
-	/// <typeparam name="TDataReaderHelper"></typeparam>
+	/// <typeparam name="TDbParams"></typeparam>
 	/// <typeparam name="TDbConnection"></typeparam>
 	/// <typeparam name="TDbTransaction"></typeparam>
 	/// <typeparam name="TDbCommand">The <see cref="DbCommand"/> type.</typeparam>
 	/// <typeparam name="TDbParameter"></typeparam>
-	/// <typeparam name="TDataAdapter"></typeparam>
+	/// <typeparam name="TDbDataAdapter"></typeparam>
 	/// <typeparam name="TDbDataReader"></typeparam>
-	public abstract class DbFactory<TDbFactory, TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader> : IDisposable
-		where TDbFactory : DbFactory<TDbFactory, TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>
-		where TDbFactoryCommand : DbFactoryCommand<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>, new()
-		where TParamsHelper : ParamsHelper<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>, new()
-		where TDataReaderHelper : DataReaderHelper<TDataReaderHelper, TDbDataReader>, new()
+	public abstract class DbFactory<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader> : IDisposable
+		where TDbFactory : DbFactory<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>
+		where TDbFactoryCommand : DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>, new()
+		where TDbParams : DbParamsBase<TDbParams, TDbCommand, TDbParameter>, new()
 		where TDbConnection : DbConnection
 		where TDbTransaction : DbTransaction
 		where TDbCommand : DbCommand
 		where TDbParameter : DbParameter
-		where TDataAdapter : DbDataAdapter, new()
+		where TDbDataAdapter : DbDataAdapter, new()
 		where TDbDataReader : DbDataReader
 	{
 		private const int DEFAULT_CONNECTION_TIMEOUT = 30;
@@ -40,6 +38,7 @@ namespace openSourceC.FrameworkLibrary.Data
 #if ENABLE_CONNECTION_TIMEOUT
 		private int _connectionTimeout;
 #endif
+		private TDbTransaction _transaction;
 
 		// Track whether Dispose has been called.
 		private bool _disposed = false;
@@ -99,10 +98,14 @@ namespace openSourceC.FrameworkLibrary.Data
 				// Check to see if managed resources need to be disposed of.
 				if (disposing)
 				{
-					// Dispose managed resources.
+					if (_transaction != null)
+					{
+						_transaction.Dispose();
+						_transaction = null;
+					}
+
 					if (_cn != null)
 					{
-						// Dispose of the connection object.
 						_cn.Dispose();
 						_cn = null;
 					}
@@ -123,7 +126,7 @@ namespace openSourceC.FrameworkLibrary.Data
 
 		#endregion
 
-		#region Connection Properties
+		#region Properties
 
 		/// <summary>
 		///		Gets the connection object of this instance.
@@ -194,6 +197,20 @@ namespace openSourceC.FrameworkLibrary.Data
 			get { return DEFAULT_CONNECTION_TIMEOUT; }
 		}
 
+		/// <summary>
+		///		Gets the current <see cref="T:TDbTransaction"/>.
+		/// </summary>
+		protected TDbTransaction Transaction
+		{
+			get { return _transaction; }
+			set { _transaction = value; }
+		}
+
+		/// <summary>
+		///		Gets a value indicating that a transaction exists.
+		/// </summary>
+		public bool TransactionExists { get { return _transaction != null; } }
+
 		#endregion
 
 		#region Connection Methods
@@ -256,7 +273,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <returns></returns>
 		public TDbFactoryCommand CreateStoredProcedureCommand(string commandText)
 		{
-			return DbFactoryCommand<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>.Create(commandText, CommandType.StoredProcedure, Connection, false);
+			return DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create(commandText, CommandType.StoredProcedure, Connection, false);
 		}
 
 		/// <summary>
@@ -266,7 +283,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <returns></returns>
 		public TDbFactoryCommand CreateTableDirectCommand(string commandText)
 		{
-			return DbFactoryCommand<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>.Create(commandText, CommandType.TableDirect, Connection, false);
+			return DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create(commandText, CommandType.TableDirect, Connection, false);
 		}
 
 		/// <summary>
@@ -276,7 +293,54 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <returns></returns>
 		public TDbFactoryCommand CreateTextCommand(string commandText)
 		{
-			return DbFactoryCommand<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>.Create(commandText, CommandType.Text, Connection, false);
+			return DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create(commandText, CommandType.Text, Connection, false);
+		}
+
+		#endregion
+
+		#region Transaction Methods
+
+		/// <summary>
+		///		Begins a database transaction.
+		/// </summary>
+		public void BeginTransaction()
+		{
+			_transaction = (TDbTransaction)Connection.BeginTransaction();
+		}
+
+		/// <summary>
+		///		Begins a database transaction with the specified <see cref="T:IsolationLevel"/> value.
+		/// </summary>
+		/// <param name="isolationLevel">One of the <see cref="T:IsolationLevel"/> values.</param>
+		public void BeginTransaction(IsolationLevel isolationLevel)
+		{
+			_transaction = (TDbTransaction)Connection.BeginTransaction(isolationLevel);
+		}
+
+		/// <summary>
+		///		Commits the database transaction.
+		/// </summary>
+		public void Commit()
+		{
+			if (!TransactionExists)
+			{
+				throw new OscErrorException("Not in a transaction");
+			}
+
+			_transaction.Commit();
+		}
+
+		/// <summary>
+		///		Rolls back a transaction from a pending state.
+		/// </summary>
+		public void Rollback()
+		{
+			if (!TransactionExists)
+			{
+				throw new OscErrorException("Not in a transaction");
+			}
+
+			_transaction.Rollback();
 		}
 
 		#endregion

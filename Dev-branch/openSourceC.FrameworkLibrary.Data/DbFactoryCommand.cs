@@ -13,30 +13,28 @@ namespace openSourceC.FrameworkLibrary.Data
 	///		Summary description for DbFactoryCommand.
 	/// </summary>
 	/// <typeparam name="TDbFactoryCommand"></typeparam>
-	/// <typeparam name="TParamsHelper"></typeparam>
-	/// <typeparam name="TDataReaderHelper"></typeparam>
+	/// <typeparam name="TDbParams"></typeparam>
 	/// <typeparam name="TDbConnection"></typeparam>
 	/// <typeparam name="TDbTransaction"></typeparam>
 	/// <typeparam name="TDbCommand">The <see cref="DbCommand"/> type.</typeparam>
 	/// <typeparam name="TDbParameter"></typeparam>
-	/// <typeparam name="TDataAdapter"></typeparam>
+	/// <typeparam name="TDbDataAdapter"></typeparam>
 	/// <typeparam name="TDbDataReader"></typeparam>
-	public abstract class DbFactoryCommand<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader> : IDisposable
-		where TDbFactoryCommand : DbFactoryCommand<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>, new()
-		where TParamsHelper : ParamsHelper<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>, new()
-		where TDataReaderHelper : DataReaderHelper<TDataReaderHelper, TDbDataReader>, new()
+	public abstract class DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader> : IDisposable
+		where TDbFactoryCommand : DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>, new()
+		where TDbParams : DbParamsBase<TDbParams, TDbCommand, TDbParameter>, new()
 		where TDbConnection : DbConnection
 		where TDbTransaction : DbTransaction
 		where TDbCommand : DbCommand
 		where TDbParameter : DbParameter
-		where TDataAdapter : DbDataAdapter, new()
+		where TDbDataAdapter : DbDataAdapter, new()
 		where TDbDataReader : DbDataReader
 	{
 		private const int DEFAULT_COMMAND_TIMEOUT = 30;
 		private const string DEFAULT_RETURN_VALUE_PARAMETER_NAME = "RETURN_VALUE";
 
 		private TDbCommand _cmd;
-		private TParamsHelper _paramsHelper;
+		private TDbParams _paramsHelper;
 
 		// Track whether Dispose has been called.
 		private bool _disposed = false;
@@ -75,8 +73,8 @@ namespace openSourceC.FrameworkLibrary.Data
 			dbFactoryCommand._cmd.CommandTimeout = dbFactoryCommand.DefaultCommandTimeout;
 			dbFactoryCommand.AutoPrepare = autoPrepare;
 
-			dbFactoryCommand._paramsHelper = ParamsHelper<TDbFactoryCommand, TParamsHelper, TDataReaderHelper, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDataAdapter, TDbDataReader>.Create(dbFactoryCommand._cmd);
-			dbFactoryCommand._paramsHelper.AddInt32(dbFactoryCommand.ReturnValueParameterName).Direction = ParameterDirection.ReturnValue;
+			dbFactoryCommand._paramsHelper = DbParamsBase<TDbParams, TDbCommand, TDbParameter>.Create(dbFactoryCommand._cmd);
+			dbFactoryCommand._paramsHelper.AddInt32(dbFactoryCommand.ReturnValueParameterName, ParameterDirection.ReturnValue);
 
 			return dbFactoryCommand;
 		}
@@ -216,15 +214,19 @@ namespace openSourceC.FrameworkLibrary.Data
 		}
 
 		/// <summary>
-		///		Gets the current Params object.
+		///		Gets the current <see cref="T:TDbParams"/> object.
 		/// </summary>
-		public TParamsHelper Params
+		public TDbParams Params
 		{
 			get { return _paramsHelper; }
 		}
 
 		/// <summary>
 		///		Gets the return value from the last executed command.
+		///		<para>
+		///			If an exception occurred while using the reader, a <b>null</b> value will be
+		///			returned.
+		///		</para>
 		///		<para>NOTE: May not be valid while the data reader is open.</para>
 		/// </summary>
 		public int? ReturnValue
@@ -303,7 +305,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// </returns>
 		public int ExecuteDataSet(DataSet dataSet)
 		{
-			using (TDataAdapter dataAdapter = new TDataAdapter())
+			using (TDbDataAdapter dataAdapter = new TDbDataAdapter())
 			{
 				dataAdapter.SelectCommand = _cmd;
 
@@ -353,9 +355,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" />.
 		/// </summary>
 		///	<returns>
-		///		A <see cref="T:TDataReaderHelper"/> object.
+		///		A <see cref="T:TDbDataReader"/> object.
 		///	</returns>
-		public TDataReaderHelper ExecuteReader()
+		public TDbDataReader ExecuteReader()
 		{
 			return ExecuteReader(CommandBehavior.Default);
 		}
@@ -366,9 +368,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// </summary>
 		/// <param name="behavior">One of the <see cref="P:CommandBehavior"/> values.</param>
 		///	<returns>
-		///		A <see cref="T:TDataReaderHelper"/> object.
+		///		A <see cref="T:TDbDataReader"/> object.
 		///	</returns>
-		public TDataReaderHelper ExecuteReader(CommandBehavior behavior)
+		public TDbDataReader ExecuteReader(CommandBehavior behavior)
 		{
 			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
 
@@ -382,14 +384,14 @@ namespace openSourceC.FrameworkLibrary.Data
 				_cmd.Prepare();
 			}
 
-			return DataReaderHelper<TDataReaderHelper, TDbDataReader>.Create((TDbDataReader)_cmd.ExecuteReader(behavior));
+			return (TDbDataReader)_cmd.ExecuteReader(behavior);
 		}
 
 		/// <summary>
 		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" />.
 		/// </summary>
 		/// <param name="readerDelegate">The delegate that processes the data reader.</param>
-		public void ExecuteReader(DbReaderDelegate<TDataReaderHelper, TDbDataReader> readerDelegate)
+		public void ExecuteReader(DbReaderDelegate<TDbDataReader> readerDelegate)
 		{
 			ExecuteReader(CommandBehavior.Default, readerDelegate);
 		}
@@ -400,8 +402,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// </summary>
 		/// <param name="behavior">One of the <see cref="P:CommandBehavior"/> values.</param>
 		/// <param name="readerDelegate">The delegate that processes the data reader.</param>
-		public void ExecuteReader(CommandBehavior behavior, DbReaderDelegate<TDataReaderHelper, TDbDataReader> readerDelegate)
+		public void ExecuteReader(CommandBehavior behavior, DbReaderDelegate<TDbDataReader> readerDelegate)
 		{
+			OscException readerDelegateException = null;
 			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
 
 			if (!isOpened)
@@ -420,7 +423,11 @@ namespace openSourceC.FrameworkLibrary.Data
 				{
 					try
 					{
-						readerDelegate(DataReaderHelper<TDataReaderHelper, TDbDataReader>.Create(dr));
+						readerDelegate(dr);
+					}
+					catch (Exception ex)
+					{
+						readerDelegateException = (ex is OscException ? (OscException)ex : new ReaderDelegateException(_cmd, ex));
 					}
 					finally
 					{
@@ -433,6 +440,11 @@ namespace openSourceC.FrameworkLibrary.Data
 				if (!isOpened)
 				{
 					//_cmd.Connection.Close();
+				}
+
+				if (readerDelegateException != null)
+				{
+					throw readerDelegateException;
 				}
 			}
 		}
@@ -447,7 +459,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///	<returns>
 		///		A <see cref="T:TFillObject"/> object populated by the data reader.
 		///	</returns>
-		public TFillObject ExecuteReader<TFillObject>(DbReaderDelegate<TDataReaderHelper, TDbDataReader, TFillObject> readerDelegate)
+		public TFillObject ExecuteReader<TFillObject>(DbReaderDelegate<TDbDataReader, TFillObject> readerDelegate)
 		{
 			return ExecuteReader<TFillObject>(CommandBehavior.Default, readerDelegate);
 		}
@@ -463,8 +475,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		///	<returns>
 		///		A <see cref="T:TFillObject"/> object populated by the data reader.
 		///	</returns>
-		public TFillObject ExecuteReader<TFillObject>(CommandBehavior behavior, DbReaderDelegate<TDataReaderHelper, TDbDataReader, TFillObject> readerDelegate)
+		public TFillObject ExecuteReader<TFillObject>(CommandBehavior behavior, DbReaderDelegate<TDbDataReader, TFillObject> readerDelegate)
 		{
+			OscException readerDelegateException = null;
 			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
 
 			if (!isOpened)
@@ -483,7 +496,13 @@ namespace openSourceC.FrameworkLibrary.Data
 				{
 					try
 					{
-						return readerDelegate(DataReaderHelper<TDataReaderHelper, TDbDataReader>.Create(dr));
+						return readerDelegate(dr);
+					}
+					catch (Exception ex)
+					{
+						readerDelegateException = (ex is OscException ? (OscException)ex : new ReaderDelegateException(_cmd, ex));
+
+						return default(TFillObject);
 					}
 					finally
 					{
@@ -496,6 +515,11 @@ namespace openSourceC.FrameworkLibrary.Data
 				if (!isOpened)
 				{
 					//_cmd.Connection.Close();
+				}
+
+				if (readerDelegateException != null)
+				{
+					throw readerDelegateException;
 				}
 			}
 		}
