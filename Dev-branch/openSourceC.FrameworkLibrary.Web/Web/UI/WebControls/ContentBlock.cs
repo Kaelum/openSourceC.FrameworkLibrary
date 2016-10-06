@@ -52,7 +52,7 @@ namespace openSourceC.FrameworkLibrary.Web.UI.WebControls
 
 		#endregion
 
-		#region Public Propterties
+		#region Public Properties
 
 		/// <summary>
 		///		

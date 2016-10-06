@@ -17,43 +17,43 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		Initializes a new instance of the <see cref="DbFactoryBase"/> class.
 		/// </summary>
 		/// <param name="configurationSection">The <see cref="DbFactorySectionBase"/> object.</param>
-		/// <param name="settingName">The name of data factory setting to use.</param>
-		protected DbFactoryBase(DbFactorySectionBase configurationSection, string settingName)
+		/// <param name="providerName">The name of data factory provider to use.</param>
+		protected DbFactoryBase(DbFactorySectionBase configurationSection, string providerName)
 		{
 			if (configurationSection == null)
 			{
 				throw new ArgumentNullException("configurationSection");
 			}
 
-			if (settingName == null)
+			if (providerName == null)
 			{
-				throw new ArgumentNullException("settingName");
+				throw new ArgumentNullException("providerName");
 			}
 
-			if (configurationSection.Settings == null)
+			if (configurationSection.Providers == null)
 			{
-				throw new OscErrorException("settings element not found.");
+				throw new OscErrorException("provider element not found.");
 			}
 
-			SettingSettings settingSettings = configurationSection.Settings[settingName];
+			DbProviderElement provider = configurationSection.Providers[providerName];
 
-			if (settingSettings == null)
+			if (provider == null)
 			{
-				throw new OscErrorException(string.Format("{0} not found.", settingName));
+				throw new OscErrorException(string.Format("Provider {0} not found.", providerName));
 			}
 
-			Debug.WriteLine(string.Format("DataFactorySettings: Name: {0}, ConnectionStringName: {1}", settingSettings.Name, settingSettings.ConnectionStringName));
+			Debug.WriteLine(string.Format("DbFactory Provider: Name: {0}, ConnectionStringName: {1}", provider.Name, provider.ConnectionStringName));
 
-			if (settingSettings.ElementInformation != null && settingSettings.ElementInformation.Properties != null)
+			if (provider.ElementInformation != null && provider.ElementInformation.Properties != null)
 			{
-				foreach (PropertyInformation pi in settingSettings.ElementInformation.Properties)
+				foreach (PropertyInformation pi in provider.ElementInformation.Properties)
 				{
 					Debug.WriteLine(string.Format("\tProperty: {0} = {1}", pi.Name, pi.Value));
 				}
 			}
 
-			ConnectionStringName = settingSettings.ConnectionStringName;
-			ApplicationName = settingSettings.ApplicationName;
+			ConnectionStringName = provider.ConnectionStringName;
+			ApplicationName = provider.ApplicationName;
 		}
 
 		#endregion

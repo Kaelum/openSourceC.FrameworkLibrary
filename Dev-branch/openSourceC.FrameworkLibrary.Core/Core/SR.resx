@@ -117,8 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="StringTest" xml:space="preserve">
-    <value>StringValue1</value>
+  <data name="Config_provider_name_null_or_empty" xml:space="preserve">
+    <value>Provider name cannot be null or empty.</value>
+    <comment>StringComment</comment>
+  </data>
+  <data name="Provider_Already_Initialized" xml:space="preserve">
+    <value>This provider instance has already been initialized.</value>
     <comment>StringComment</comment>
   </data>
 </root>

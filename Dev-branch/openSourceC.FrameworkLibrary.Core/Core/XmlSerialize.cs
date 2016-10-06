@@ -34,7 +34,7 @@ namespace openSourceC.FrameworkLibrary
 			}
 		);
 
-		// This object removes the default namespaces created by the XmlSerializer.
+		// This object removes the default namespaces created by the XmlSerializer and supports nil.
 		private static readonly XmlSerializerNamespaces _xmlnsNil = new XmlSerializerNamespaces(
 			new XmlQualifiedName[] {
 				new XmlQualifiedName(string.Empty, string.Empty),
@@ -42,6 +42,8 @@ namespace openSourceC.FrameworkLibrary
 			}
 		);
 
+
+		#region DecryptFromBase64String
 
 		/// <summary>
 		///		Decrypts and deserializes the specified object using the specified key and
@@ -59,6 +61,27 @@ namespace openSourceC.FrameworkLibrary
 		public static TObject DecryptFromBase64String<TObject, TSymmetricAlgorithm>(string base64XmlString, byte[] key, byte[] iv)
 			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
 		{
+			return DecryptFromBase64String<TObject, TSymmetricAlgorithm>(base64XmlString, key, iv, true);
+		}
+
+		/// <summary>
+		///		Decrypts and deserializes the specified object using the specified key and
+		///		initialization vector and returns a base 64 encoded string of the encrypted data.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <typeparam name="TSymmetricAlgorithm">The type of the cryptographic object used to
+		///		perform the symmetric algorithm.</typeparam>
+		/// <param name="base64XmlString">The string to be decrypted and deserialized.</param>
+		/// <param name="key">Encryption key.</param>
+		/// <param name="iv">Encryption initialization vector.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject DecryptFromBase64String<TObject, TSymmetricAlgorithm>(string base64XmlString, byte[] key, byte[] iv, bool throwExceptions)
+			where TSymmetricAlgorithm : SymmetricAlgorithm, new()
+		{
 			try
 			{
 				using (MemoryStream stream = new MemoryStream())
@@ -73,10 +96,11 @@ namespace openSourceC.FrameworkLibrary
 					return (TObject)serializer.Deserialize(stream);
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				Debug.WriteLine(Format.Exception(ex));
-				throw;
+				if (throwExceptions) { throw; }
+
+				return default(TObject);
 			}
 		}
 
@@ -97,8 +121,34 @@ namespace openSourceC.FrameworkLibrary
 			// DESCryptoServiceProvider
 			// RC2CryptoServiceProvider
 			// TripleDESCryptoServiceProvider
-			return DecryptFromBase64String<TObject, RijndaelManaged>(base64XmlString, key, iv);
+			return DecryptFromBase64String<TObject, RijndaelManaged>(base64XmlString, key, iv, true);
 		}
+
+		/// <summary>
+		///		Decrypts and deserializes the specified object using the specified key and
+		///		initialization vector and returns a base 64 encoded string of the encrypted data.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <param name="base64XmlString">The string to be decrypted and deserialized.</param>
+		/// <param name="key">Encryption key.</param>
+		/// <param name="iv">Encryption initialization vector.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject DecryptFromBase64String<TObject>(string base64XmlString, byte[] key, byte[] iv, bool throwExceptions)
+		{
+			// RijndaelManaged
+			// DESCryptoServiceProvider
+			// RC2CryptoServiceProvider
+			// TripleDESCryptoServiceProvider
+			return DecryptFromBase64String<TObject, RijndaelManaged>(base64XmlString, key, iv, throwExceptions);
+		}
+
+		#endregion
+
+		#region Deserialize
 
 		/// <summary>
 		///		Deserializes the XML document contained by the specified <see cref="Stream"/>.
@@ -111,7 +161,23 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static TObject Deserialize<TObject>(Stream stream)
 		{
-			return (TObject)(Deserialize(typeof(TObject), stream) ?? default(TObject));
+			return Deserialize<TObject>(stream, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified <see cref="Stream"/>.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <param name="stream">The <see cref="Stream"/> that contains the XML document to
+		///		deserialize.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject Deserialize<TObject>(Stream stream, bool throwExceptions)
+		{
+			return (TObject)(Deserialize(typeof(TObject), stream, throwExceptions) ?? default(TObject));
 		}
 
 		/// <summary>
@@ -124,7 +190,22 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static TObject Deserialize<TObject>(string xmlString)
 		{
-			return (TObject)(Deserialize(typeof(TObject), xmlString) ?? default(TObject));
+			return Deserialize<TObject>(xmlString, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified string.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <param name="xmlString">The string to be deserialized.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject Deserialize<TObject>(string xmlString, bool throwExceptions)
+		{
+			return (TObject)(Deserialize(typeof(TObject), xmlString, throwExceptions) ?? default(TObject));
 		}
 
 		/// <summary>
@@ -138,7 +219,23 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static TObject Deserialize<TObject>(TextReader textReader)
 		{
-			return (TObject)(Deserialize(typeof(TObject), textReader) ?? default(TObject));
+			return Deserialize<TObject>(textReader, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified <see cref="TextReader"/>.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <param name="textReader">The <see cref="TextReader"/> that contains the XML document
+		///		to deserialize.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject Deserialize<TObject>(TextReader textReader, bool throwExceptions)
+		{
+			return (TObject)(Deserialize(typeof(TObject), textReader, throwExceptions) ?? default(TObject));
 		}
 
 		/// <summary>
@@ -151,7 +248,22 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static TObject Deserialize<TObject>(XElement node)
 		{
-			return (TObject)(Deserialize(typeof(TObject), node) ?? default(TObject));
+			return Deserialize<TObject>(node, true);
+		}
+
+		/// <summary>
+		///		Deserializes the specified <see cref="T:XElement"/>.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <param name="node">The <see cref="T:XElement"/> to be deserialized.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject Deserialize<TObject>(XElement node, bool throwExceptions)
+		{
+			return (TObject)(Deserialize(typeof(TObject), node, throwExceptions) ?? default(TObject));
 		}
 
 		/// <summary>
@@ -164,7 +276,22 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static TObject Deserialize<TObject>(XmlElement element)
 		{
-			return (TObject)(Deserialize(typeof(TObject), element) ?? default(TObject));
+			return Deserialize<TObject>(element, true);
+		}
+
+		/// <summary>
+		///		Deserializes the specified <see cref="T:XmlElement"/>.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <param name="element">The <see cref="T:XmlElement"/> to be deserialized.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject Deserialize<TObject>(XmlElement element, bool throwExceptions)
+		{
+			return (TObject)(Deserialize(typeof(TObject), element, throwExceptions) ?? default(TObject));
 		}
 
 		/// <summary>
@@ -178,7 +305,23 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static TObject Deserialize<TObject>(XmlReader xmlReader)
 		{
-			return (TObject)(Deserialize(typeof(TObject), xmlReader) ?? default(TObject));
+			return Deserialize<TObject>(xmlReader, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified <see cref="XmlReader"/>.
+		/// </summary>
+		/// <typeparam name="TObject">The type of the object to deserialize.</typeparam>
+		/// <param name="xmlReader">The <see cref="XmlReader"/> that contains the XML document
+		///		to deserialize.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of type <typeparamref name="TObject"/>.
+		/// </returns>
+		public static TObject Deserialize<TObject>(XmlReader xmlReader, bool throwExceptions)
+		{
+			return (TObject)(Deserialize(typeof(TObject), xmlReader, throwExceptions) ?? default(TObject));
 		}
 
 		/// <summary>
@@ -192,6 +335,22 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static object Deserialize(Type type, Stream stream)
 		{
+			return Deserialize(type, stream, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified <see cref="Stream"/>.
+		/// </summary>
+		/// <param name="type">The type of the object to deserialize.</param>
+		/// <param name="stream">The <see cref="Stream"/> that contains the XML document to
+		///		deserialize.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		null on exception.</param>
+		/// <returns>
+		///		An object of the specified type.
+		/// </returns>
+		public static object Deserialize(Type type, Stream stream, bool throwExceptions)
+		{
 			if (type == null) { throw new ArgumentNullException("type"); }
 
 			if (stream == null || (stream.CanSeek && stream.Length == 0L)) { return null; }
@@ -201,10 +360,11 @@ namespace openSourceC.FrameworkLibrary
 				XmlSerializer serializer = new XmlSerializer(type);
 				return serializer.Deserialize(stream);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				Debug.WriteLine(Format.Exception(ex));
-				throw;
+				if (throwExceptions) { throw; }
+
+				return null;
 			}
 		}
 
@@ -218,6 +378,21 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static object Deserialize(Type type, string xmlString)
 		{
+			return Deserialize(type, xmlString, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified string.
+		/// </summary>
+		/// <param name="type">The type of the object to deserialize.</param>
+		/// <param name="xmlString">The string to be deserialized.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		null on exception.</param>
+		/// <returns>
+		///		An object of the specified type.
+		/// </returns>
+		public static object Deserialize(Type type, string xmlString, bool throwExceptions)
+		{
 			if (type == null) { throw new ArgumentNullException("type"); }
 
 			if (string.IsNullOrWhiteSpace(xmlString)) { return null; }
@@ -230,10 +405,11 @@ namespace openSourceC.FrameworkLibrary
 					return serializer.Deserialize(stringReader);
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				Debug.WriteLine(Format.Exception(ex));
-				throw;
+				if (throwExceptions) { throw; }
+
+				return null;
 			}
 		}
 
@@ -248,6 +424,22 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static object Deserialize(Type type, TextReader textReader)
 		{
+			return Deserialize(type, textReader, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified <see cref="TextReader"/>.
+		/// </summary>
+		/// <param name="type">The type of the object to deserialize.</param>
+		/// <param name="textReader">The <see cref="TextReader"/> that contains the XML document
+		///		to deserialize.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		null on exception.</param>
+		/// <returns>
+		///		An object of the specified type.
+		/// </returns>
+		public static object Deserialize(Type type, TextReader textReader, bool throwExceptions)
+		{
 			if (type == null) { throw new ArgumentNullException("type"); }
 
 			if (textReader == null) { return null; }
@@ -257,10 +449,11 @@ namespace openSourceC.FrameworkLibrary
 				XmlSerializer serializer = new XmlSerializer(type);
 				return serializer.Deserialize(textReader);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				Debug.WriteLine(Format.Exception(ex));
-				throw;
+				if (throwExceptions) { throw; }
+
+				return null;
 			}
 		}
 
@@ -274,13 +467,37 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static object Deserialize(Type type, XElement node)
 		{
+			return Deserialize(type, node, true);
+		}
+
+		/// <summary>
+		///		Deserializes the specified <see cref="T:XElement"/>.
+		/// </summary>
+		/// <param name="type">The type of the object to deserialize.</param>
+		/// <param name="node">The <see cref="T:XElement"/> to be deserialized.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		<see cref="T:default(TObject)"/> on exception.</param>
+		/// <returns>
+		///		An object of the specified type.
+		/// </returns>
+		public static object Deserialize(Type type, XElement node, bool throwExceptions)
+		{
 			if (type == null) { throw new ArgumentNullException("type"); }
 
 			if (node == null) { return null; }
 
-			using (XmlReader xmlReader = node.CreateReader())
+			try
 			{
-				return Deserialize(type, xmlReader);
+				using (XmlReader xmlReader = node.CreateReader())
+				{
+					return Deserialize(type, xmlReader, throwExceptions);
+				}
+			}
+			catch (Exception)
+			{
+				if (throwExceptions) { throw; }
+
+				return null;
 			}
 		}
 
@@ -293,6 +510,21 @@ namespace openSourceC.FrameworkLibrary
 		///		An object of the specified type.
 		/// </returns>
 		public static object Deserialize(Type type, XmlElement element)
+		{
+			return Deserialize(type, element, true);
+		}
+
+		/// <summary>
+		///		Deserializes the specified <see cref="T:XmlElement"/>.
+		/// </summary>
+		/// <param name="type">The type of the object to deserialize.</param>
+		/// <param name="element">The <see cref="T:XmlElement"/> to be deserialized.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		null on exception.</param>
+		/// <returns>
+		///		An object of the specified type.
+		/// </returns>
+		public static object Deserialize(Type type, XmlElement element, bool throwExceptions)
 		{
 			if (type == null) { throw new ArgumentNullException("type"); }
 
@@ -320,14 +552,15 @@ namespace openSourceC.FrameworkLibrary
 					{
 						xmlReader.MoveToContent();
 
-						return Deserialize(type, xmlReader);
+						return Deserialize(type, xmlReader, throwExceptions);
 					}
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				Debug.WriteLine(Format.Exception(ex));
-				throw;
+				if (throwExceptions) { throw; }
+
+				return null;
 			}
 		}
 
@@ -342,6 +575,22 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public static object Deserialize(Type type, XmlReader xmlReader)
 		{
+			return Deserialize(type, xmlReader, true);
+		}
+
+		/// <summary>
+		///		Deserializes the XML document contained by the specified <see cref="XmlReader"/>.
+		/// </summary>
+		/// <param name="type">The type of the object to deserialize.</param>
+		/// <param name="xmlReader">The <see cref="XmlReader"/> that contains the XML document
+		///		to deserialize.</param>
+		/// <param name="throwExceptions"><b>true</b> to throw exceptions, or <b>false</b> to return
+		///		null on exception.</param>
+		/// <returns>
+		///		An object of the specified type.
+		/// </returns>
+		public static object Deserialize(Type type, XmlReader xmlReader, bool throwExceptions)
+		{
 			if (type == null) { throw new ArgumentNullException("type"); }
 
 			if (xmlReader == null) { return null; }
@@ -349,14 +598,39 @@ namespace openSourceC.FrameworkLibrary
 			try
 			{
 				XmlSerializer serializer = new XmlSerializer(type);
+#if DEBUG
+				//serializer.UnknownAttribute += (sender, e) =>
+				//{
+				//	Debug.WriteLine("UnknownAttribute: {0} at line {1}, pos {2}", e.Attr.Name, e.LineNumber, e.LinePosition);
+				//};
+				//serializer.UnknownElement += (sender, e) =>
+				//{
+				//	Debug.WriteLine("UnknownElement: {0} at line {1}, pos {2}", e.Element.Name, e.LineNumber, e.LinePosition);
+				//};
+				//serializer.UnreferencedObject += (sender, e) =>
+				//{
+				//	Debug.WriteLine("UnreferencedObject: ID={0}, UnreferencedObject={1}", e.UnreferencedId, e.UnreferencedObject);
+				//};
+#endif
+
 				return serializer.Deserialize(xmlReader);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				Debug.WriteLine(Format.Exception(ex));
-				throw;
+				if (throwExceptions) { throw; }
+
+				return null;
 			}
 		}
+
+		static void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
+
+		#region EncryptToBase64String
 
 		/// <summary>
 		///		Encrypts and serializes the specified object using the specified key and
@@ -414,6 +688,10 @@ namespace openSourceC.FrameworkLibrary
 			// TripleDESCryptoServiceProvider
 			return EncryptToBase64String<TObject, RijndaelManaged>(obj, key, iv, supportXsiNamespace);
 		}
+
+		#endregion
+
+		#region Serialize
 
 		/// <summary>
 		///		Serializes the specified object and returning the XML fragment as a string.
@@ -543,6 +821,8 @@ namespace openSourceC.FrameworkLibrary
 			using (XmlWriter xmlWriter = XmlWriter.Create(output, GetNewXmlWriterSettingsObject((expandForReadability))))
 			{
 				Serialize(type, obj, xmlWriter, supportXsiNamespace);
+
+				xmlWriter.Flush();
 			}
 		}
 
@@ -562,6 +842,8 @@ namespace openSourceC.FrameworkLibrary
 			using (XmlWriter xmlWriter = XmlWriter.Create(output, GetNewXmlWriterSettingsObject(expandForReadability)))
 			{
 				Serialize(type, obj, xmlWriter, supportXsiNamespace);
+
+				xmlWriter.Flush();
 			}
 		}
 
@@ -581,6 +863,8 @@ namespace openSourceC.FrameworkLibrary
 			using (XmlWriter xmlWriter = XmlWriter.Create(output, GetNewXmlWriterSettingsObject(expandForReadability)))
 			{
 				Serialize(type, obj, xmlWriter, supportXsiNamespace);
+
+				xmlWriter.Flush();
 			}
 		}
 
@@ -616,6 +900,10 @@ namespace openSourceC.FrameworkLibrary
 			}
 		}
 
+		#endregion
+
+		#region SerializeToXElement
+
 		/// <summary>
 		///		Serializes the specified object and returns the XML fragment as an <see cref="T:XElement"/>.
 		/// </summary>
@@ -649,12 +937,6 @@ namespace openSourceC.FrameworkLibrary
 		{
 			try
 			{
-				XmlReaderSettings readerSettings = new XmlReaderSettings
-				{
-					ConformanceLevel = ConformanceLevel.Fragment,
-					IgnoreWhitespace = !expandForReadability,
-				};
-
 				using (MemoryStream stream = new MemoryStream())
 				// This XmlWriter ensures that the XML is formatted correctly.
 				using (XmlWriter xmlWriter = XmlWriter.Create(stream, GetNewXmlWriterSettingsObject(expandForReadability)))
@@ -674,6 +956,10 @@ namespace openSourceC.FrameworkLibrary
 				throw;
 			}
 		}
+
+		#endregion
+
+		#region SerializeToXmlElement
 
 		/// <summary>
 		///		Serializes the specified object and returns the XML fragment as an <see cref="T:XmlElement"/>.
@@ -731,6 +1017,8 @@ namespace openSourceC.FrameworkLibrary
 				throw;
 			}
 		}
+
+		#endregion
 
 		#region Private Methods
 

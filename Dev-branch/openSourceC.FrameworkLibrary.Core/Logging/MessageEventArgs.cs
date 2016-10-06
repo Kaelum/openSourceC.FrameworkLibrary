@@ -9,19 +9,6 @@ namespace openSourceC.FrameworkLibrary
 	[Serializable]
 	public class MessageEventArgs : EventArgs
 	{
-		/// <summary>Gets the Event Log event object.</summary>
-		public EventLogEvent EventLogEvent { get; private set; }
-
-		/// <summary>Gets the calling method.</summary>
-		public LocationInfo LocationInfo { get; private set; }
-
-		/// <summary>Gets the log entry type.</summary>
-		public MessageLogEntryType MessageLogEntryType { get; private set; }
-
-		/// <summary>Gets the message.</summary>
-		public string Message { get; private set; }
-
-
 		#region Constructors
 
 		/// <summary>
@@ -185,6 +172,22 @@ namespace openSourceC.FrameworkLibrary
 
 		#endregion
 
+		#region Public Properties
+
+		/// <summary>Gets the Event Log event object.</summary>
+		public EventLogEvent EventLogEvent { get; private set; }
+
+		/// <summary>Gets the calling method.</summary>
+		public LocationInfo LocationInfo { get; private set; }
+
+		/// <summary>Gets the log entry type.</summary>
+		public MessageLogEntryType MessageLogEntryType { get; private set; }
+
+		/// <summary>Gets the message.</summary>
+		public string Message { get; private set; }
+
+		#endregion
+
 		#region ToString()
 
 		/// <summary>
@@ -195,7 +198,7 @@ namespace openSourceC.FrameworkLibrary
 		/// </returns>
 		public override string ToString()
 		{
-			return string.Format("{0:MM/dd/yyyy HH:mm:ss.fff tt}: {1}.{2}:{3}: {4}", DateTime.Now, LocationInfo.ClassName, LocationInfo.MethodName, LocationInfo.LineNumber, Message);
+			return string.Format("{0:MM/dd/yyyy HH:mm:ss.fff}: {1}.{2}:{3}: {4}", DateTime.Now, LocationInfo.ClassName, LocationInfo.MethodName, LocationInfo.LineNumber, Message);
 		}
 
 		#endregion

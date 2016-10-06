@@ -7,6 +7,7 @@ namespace openSourceC.FrameworkLibrary.Configuration
 	///		Contains a collection of <see cref="T:SettingSettings"/> objects.
 	///	</summary>
 	[ConfigurationCollection(typeof(SettingSettings))]
+	[Obsolete("This object is now obsolete.  Merge all uses into your DbProviderElementCollection, which is a merged version of ProviderSettingsCollection and SettingSettingsCollection.")]
 	public sealed class SettingSettingsCollection : ConfigurationElementCollection
 	{
 		#region Constructors
@@ -14,7 +15,7 @@ namespace openSourceC.FrameworkLibrary.Configuration
 		/// <summary>
 		///		Creates a new instance of a <see cref="T:SettingSettingsCollection"/> class.
 		///	</summary>
-		public SettingSettingsCollection() : base(StringComparer.OrdinalIgnoreCase) { }
+		public SettingSettingsCollection() : base(StringComparer.Ordinal) { }
 
 		#endregion
 

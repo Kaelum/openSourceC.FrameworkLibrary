@@ -10,7 +10,19 @@ namespace openSourceC.FrameworkLibrary.Data
 	/// </summary>
 	public static class SqlDbDataReaderExtensions
 	{
-		#region Public Methods
+		#region Get DateTimeOffset Extensions
+
+		/// <summary>
+		///     Gets the value of the specified column as a <see cref="T:DateTimeOffset"/> object.
+		/// </summary>
+		/// <param name="dataReader">The <see cref="T:DbDataReader"/> to extend.</param>
+		/// <param name="name">The name of the column.</param>
+		/// <returns>The value of the specified column.</returns>
+		public static DateTimeOffset GetDateTimeOffset(this SqlDataReader dataReader, string name)
+		{
+			try { return dataReader.GetDateTimeOffset(dataReader.GetOrdinal(name)); }
+			catch (Exception) { throw; }
+		}
 
 		/// <summary>
 		///     Gets the local time value of the specified column as a
@@ -22,7 +34,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="T:Nullable&lt;DateTime&gt;"/> object consisting of the time represented
 		///		by the value of the specified column.
 		///	</returns>
-		public static DateTime? GetDateTimeOffsetAsNullableDateTimeLocal(this SqlDataReader dataReader, int ordinal)
+		public static DateTime? GetDateTimeOffsetAsDateTimeLocalNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
 			try { return dataReader.IsDBNull(ordinal) ? (DateTime?)null : dataReader.GetDateTimeOffset(ordinal).LocalDateTime; }
 			catch (InvalidCastException ex) { throw new InvalidCastException(string.Format(SR.Type_mismatch_on_column, ordinal, dataReader.GetName(ordinal)), ex); }
@@ -38,9 +50,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="T:Nullable&lt;DateTime&gt;"/> object consisting of the time represented
 		///		by the value of the specified column.
 		///	</returns>
-		public static DateTime? GetDateTimeOffsetAsNullableDateTimeLocal(this SqlDataReader dataReader, string name)
+		public static DateTime? GetDateTimeOffsetAsDateTimeLocalNullSafe(this SqlDataReader dataReader, string name)
 		{
-			try { return GetDateTimeOffsetAsNullableDateTimeLocal(dataReader, dataReader.GetOrdinal(name)); }
+			try { return GetDateTimeOffsetAsDateTimeLocalNullSafe(dataReader, dataReader.GetOrdinal(name)); }
 			catch (Exception) { throw; }
 
 		}
@@ -55,7 +67,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="T:Nullable&lt;DateTime&gt;"/> object consisting of the time represented
 		///		by the value of the specified column.
 		///	</returns>
-		public static DateTime? GetDateTimeOffsetAsNullableDateTimeUtc(this SqlDataReader dataReader, int ordinal)
+		public static DateTime? GetDateTimeOffsetAsDateTimeUtcNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
 			try { return dataReader.IsDBNull(ordinal) ? (DateTime?)null : dataReader.GetDateTimeOffset(ordinal).UtcDateTime; }
 			catch (InvalidCastException ex) { throw new InvalidCastException(string.Format(SR.Type_mismatch_on_column, ordinal, dataReader.GetName(ordinal)), ex); }
@@ -71,9 +83,9 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="T:Nullable&lt;DateTime&gt;"/> object consisting of the time represented
 		///		by the value of the specified column.
 		///	</returns>
-		public static DateTime? GetDateTimeOffsetAsNullableDateTimeUtc(this SqlDataReader dataReader, string name)
+		public static DateTime? GetDateTimeOffsetAsDateTimeUtcNullSafe(this SqlDataReader dataReader, string name)
 		{
-			try { return GetDateTimeOffsetAsNullableDateTimeUtc(dataReader, dataReader.GetOrdinal(name)); }
+			try { return GetDateTimeOffsetAsDateTimeUtcNullSafe(dataReader, dataReader.GetOrdinal(name)); }
 			catch (Exception) { throw; }
 
 		}
@@ -88,7 +100,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="Nullable&lt;DateTimeOffset&gt;"/> object consisting of the time represented
 		///		by the value of the specified column.
 		///	</returns>
-		public static DateTimeOffset? GetNullableDateTimeOffset(this SqlDataReader dataReader, int ordinal)
+		public static DateTimeOffset? GetDateTimeOffsetNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
 			try { return dataReader.IsDBNull(ordinal) ? (DateTimeOffset?)null : dataReader.GetDateTimeOffset(ordinal); }
 			catch (InvalidCastException ex) { throw new InvalidCastException(string.Format(SR.Type_mismatch_on_column, ordinal, dataReader.GetName(ordinal)), ex); }
@@ -104,9 +116,25 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="T:Nullable&lt;DateTimeOffset&gt;"/> object consisting of the time represented
 		///		by the value of the specified column.
 		///	</returns>
-		public static DateTimeOffset? GetNullableDateTimeOffset(this SqlDataReader dataReader, string name)
+		public static DateTimeOffset? GetDateTimeOffsetNullSafe(this SqlDataReader dataReader, string name)
 		{
-			try { return GetNullableDateTimeOffset(dataReader, dataReader.GetOrdinal(name)); }
+			try { return GetDateTimeOffsetNullSafe(dataReader, dataReader.GetOrdinal(name)); }
+			catch (Exception) { throw; }
+		}
+
+		#endregion
+
+		#region Get TimeSpan Extensions
+
+		/// <summary>
+		///     Gets the value of the specified column as a <see cref="T:TimeSpan"/> object.
+		/// </summary>
+		/// <param name="dataReader">The <see cref="T:DbDataReader"/> to extend.</param>
+		/// <param name="name">The name of the column.</param>
+		/// <returns>The value of the specified column.</returns>
+		public static TimeSpan GetTimeSpan(this SqlDataReader dataReader, string name)
+		{
+			try { return dataReader.GetTimeSpan(dataReader.GetOrdinal(name)); }
 			catch (Exception) { throw; }
 		}
 
@@ -120,7 +148,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="Nullable&lt;TimeSpan&gt;"/> object consisting of the timespan
 		///		represented by the value of the specified column.
 		///	</returns>
-		public static TimeSpan? GetNullableTimeSpan(this SqlDataReader dataReader, int ordinal)
+		public static TimeSpan? GetTimeSpanNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
 			try { return dataReader.IsDBNull(ordinal) ? (TimeSpan?)null : dataReader.GetTimeSpan(ordinal); }
 			catch (InvalidCastException ex) { throw new InvalidCastException(string.Format(SR.Type_mismatch_on_column, ordinal, dataReader.GetName(ordinal)), ex); }
@@ -136,11 +164,15 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		A <see cref="T:Nullable&lt;TimeSpan&gt;"/> object consisting of the timespan
 		///		represented by the value of the specified column.
 		///	</returns>
-		public static TimeSpan? GetNullableTimeSpan(this SqlDataReader dataReader, string name)
+		public static TimeSpan? GetTimeSpanNullSafe(this SqlDataReader dataReader, string name)
 		{
-			try { return GetNullableTimeSpan(dataReader, dataReader.GetOrdinal(name)); }
+			try { return GetTimeSpanNullSafe(dataReader, dataReader.GetOrdinal(name)); }
 			catch (Exception) { throw; }
 		}
+
+		#endregion
+
+		#region Get XElement Extensions
 
 		/// <summary>
 		///     Gets the value of the specified column as an <see cref="XElement"/> object.
@@ -151,7 +183,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		An <see cref="XElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XElement GetNullableXElement(this SqlDataReader dataReader, int ordinal)
+		public static XElement GetXElementNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
 			try { return dataReader.IsDBNull(ordinal) ? (XElement)null : XElement.Load(dataReader.GetXmlReader(ordinal), LoadOptions.PreserveWhitespace); }
 			catch (InvalidCastException ex) { throw new InvalidCastException(string.Format(SR.Type_mismatch_on_column, ordinal, dataReader.GetName(ordinal)), ex); }
@@ -166,11 +198,15 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		An <see cref="XElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XElement GetNullableXElement(this SqlDataReader dataReader, string name)
+		public static XElement GetXElementNullSafe(this SqlDataReader dataReader, string name)
 		{
-			try { return GetNullableXElement(dataReader, dataReader.GetOrdinal(name)); }
+			try { return GetXElementNullSafe(dataReader, dataReader.GetOrdinal(name)); }
 			catch (Exception) { throw; }
 		}
+
+		#endregion
+
+		#region Get XmlElement Extensions
 
 		/// <summary>
 		///     Gets the value of the specified column as an <see cref="XmlElement"/> object.
@@ -181,7 +217,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		An <see cref="XmlElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XmlElement GetNullableXmlElement(this SqlDataReader dataReader, int ordinal)
+		public static XmlElement GetXmlElementNullSafe(this SqlDataReader dataReader, int ordinal)
 		{
 			try
 			{
@@ -204,11 +240,15 @@ namespace openSourceC.FrameworkLibrary.Data
 		///		An <see cref="XmlElement"/> object that represents the XML contents of the specified
 		///		column.
 		///	</returns>
-		public static XmlElement GetNullableXmlElement(this SqlDataReader dataReader, string name)
+		public static XmlElement GetXmlElementNullSafe(this SqlDataReader dataReader, string name)
 		{
-			try { return GetNullableXmlElement(dataReader, dataReader.GetOrdinal(name)); }
+			try { return GetXmlElementNullSafe(dataReader, dataReader.GetOrdinal(name)); }
 			catch (Exception) { throw; }
 		}
+
+		#endregion
+
+		#region Get XmlReader Extensions
 
 		/// <summary>
 		///		Retrieves data of type XML as an <see cref="T:XmlReader"/>.

@@ -6,12 +6,14 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace openSourceC.FrameworkLibrary.Data
 {
 	/// <summary>
 	///		Summary description for DbFactoryCommand.
 	/// </summary>
+	/// <typeparam name="TDbFactory"></typeparam>
 	/// <typeparam name="TDbFactoryCommand"></typeparam>
 	/// <typeparam name="TDbParams"></typeparam>
 	/// <typeparam name="TDbConnection"></typeparam>
@@ -20,8 +22,9 @@ namespace openSourceC.FrameworkLibrary.Data
 	/// <typeparam name="TDbParameter"></typeparam>
 	/// <typeparam name="TDbDataAdapter"></typeparam>
 	/// <typeparam name="TDbDataReader"></typeparam>
-	public abstract class DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader> : IDisposable
-		where TDbFactoryCommand : DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>, new()
+	public abstract class DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader> : IDisposable
+		where TDbFactory : DbFactory<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>
+		where TDbFactoryCommand : DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>, new()
 		where TDbParams : DbParamsBase<TDbParams, TDbCommand, TDbParameter>, new()
 		where TDbConnection : DbConnection
 		where TDbTransaction : DbTransaction
@@ -33,6 +36,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		private const int DEFAULT_COMMAND_TIMEOUT = 30;
 		private const string DEFAULT_RETURN_VALUE_PARAMETER_NAME = "RETURN_VALUE";
 
+		private TDbFactory _factory;
 		private TDbCommand _cmd;
 		private TDbParams _paramsHelper;
 
@@ -54,19 +58,20 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///		Create a new <see cref="T:TDbFactoryCommand"/> object.
 		/// </summary>
+		/// <param name="factory">The factory object.</param>
 		/// <param name="commandText">The command string.</param>
 		/// <param name="commandType">The type of command in commandText.</param>
-		/// <param name="connection">The connection object to use.</param>
 		/// <param name="autoPrepare">Indicates that the <b>Execute</b> methods will automatically
 		///		call the <see cref="T:TDbCommand.Prepare" /> method before executing.</param>
 		///	<returns>
 		///		A new <see cref="T:TDbFactoryCommand"/> object.
 		///	</returns>
-		internal static TDbFactoryCommand Create(string commandText, CommandType commandType, TDbConnection connection, bool autoPrepare)
+		internal static TDbFactoryCommand Create(TDbFactory factory, string commandText, CommandType commandType, bool autoPrepare)
 		{
 			TDbFactoryCommand dbFactoryCommand = new TDbFactoryCommand();
+			dbFactoryCommand._factory = factory;
 
-			dbFactoryCommand._cmd = (TDbCommand)connection.CreateCommand();
+			dbFactoryCommand._cmd = (TDbCommand)factory.Connection.CreateCommand();
 
 			dbFactoryCommand._cmd.CommandType = commandType;
 			dbFactoryCommand._cmd.CommandText = commandText;
@@ -305,6 +310,8 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// </returns>
 		public int ExecuteDataSet(DataSet dataSet)
 		{
+			EnsureTransaction();
+
 			using (TDbDataAdapter dataAdapter = new TDbDataAdapter())
 			{
 				dataAdapter.SelectCommand = _cmd;
@@ -326,12 +333,25 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// </returns>
 		public int ExecuteNonQuery()
 		{
-			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
+			return Task.Run(() => ExecuteNonQueryAsync()).Result;
+		}
 
-			if (!isOpened)
+		/// <summary>
+		///		Executes a Transact-SQL statement against the connection.
+		/// </summary>
+		/// <returns>
+		///		The number of rows affected.
+		/// </returns>
+		public async Task<int> ExecuteNonQueryAsync()
+		{
+			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+
+			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				await _cmd.Connection.OpenAsync();
 			}
+
+			EnsureTransaction();
 
 			try
 			{
@@ -340,15 +360,46 @@ namespace openSourceC.FrameworkLibrary.Data
 					_cmd.Prepare();
 				}
 
-				return _cmd.ExecuteNonQuery();
+				return await _cmd.ExecuteNonQueryAsync();
 			}
 			finally
 			{
-				if (!isOpened)
+				if (isClosed)
 				{
 					//_cmd.Connection.Close();
 				}
 			}
+		}
+
+		/// <summary>
+		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" /> using
+		///		one of the <see cref="CommandBehavior" /> values, and returns a <see cref="T:TResult"/>.
+		/// </summary>
+		/// <typeparam name="TResult">The type of the object to return.</typeparam>
+		/// <param name="behavior">One of the <see cref="P:CommandBehavior"/> values.</param>
+		/// <param name="readerDelegate">The delegate that processes the data reader and returns a
+		///		<see cref="T:TResult"/> object.</param>
+		///	<returns>
+		///		A <see cref="T:TResult"/> object populated by the data reader.
+		///	</returns>
+		public TResult ExecuteReader<TResult>(CommandBehavior behavior, Func<TDbDataReader, TResult> readerDelegate)
+		{
+			return Task.Run(() => ExecuteReaderAsync<TResult>(behavior, async (reader) => await Task.Run(() => readerDelegate(reader)))).Result;
+		}
+
+		/// <summary>
+		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" />, and
+		///		returns a <see cref="T:TResult"/>.
+		/// </summary>
+		/// <typeparam name="TResult">The type of the object to return.</typeparam>
+		/// <param name="readerDelegate">The delegate that processes the data reader and returns a
+		///		<see cref="T:TResult"/> object.</param>
+		///	<returns>
+		///		A <see cref="T:TResult"/> object populated by the data reader.
+		///	</returns>
+		public TResult ExecuteReader<TResult>(Func<TDbDataReader, TResult> readerDelegate)
+		{
+			return ExecuteReader<TResult>(CommandBehavior.Default, readerDelegate);
 		}
 
 		/// <summary>
@@ -372,45 +423,31 @@ namespace openSourceC.FrameworkLibrary.Data
 		///	</returns>
 		public TDbDataReader ExecuteReader(CommandBehavior behavior)
 		{
-			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
-
-			if (!isOpened)
-			{
-				_cmd.Connection.Open();
-			}
-
-			if (AutoPrepare)
-			{
-				_cmd.Prepare();
-			}
-
-			return (TDbDataReader)_cmd.ExecuteReader(behavior);
-		}
-
-		/// <summary>
-		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" />.
-		/// </summary>
-		/// <param name="readerDelegate">The delegate that processes the data reader.</param>
-		public void ExecuteReader(DbReaderDelegate<TDbDataReader> readerDelegate)
-		{
-			ExecuteReader(CommandBehavior.Default, readerDelegate);
+			return Task.Run(() => ExecuteReaderAsync(behavior)).Result;
 		}
 
 		/// <summary>
 		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" /> using
-		///		one of the <see cref="CommandBehavior" /> values.
+		///		one of the <see cref="CommandBehavior" /> values, and returns a <see cref="T:TResult"/>.
 		/// </summary>
+		/// <typeparam name="TResult">The type of the object to return.</typeparam>
 		/// <param name="behavior">One of the <see cref="P:CommandBehavior"/> values.</param>
-		/// <param name="readerDelegate">The delegate that processes the data reader.</param>
-		public void ExecuteReader(CommandBehavior behavior, DbReaderDelegate<TDbDataReader> readerDelegate)
+		/// <param name="readerDelegate">The delegate that processes the data reader and returns a
+		///		<see cref="T:TResult"/> object.</param>
+		///	<returns>
+		///		A <see cref="T:TResult"/> object populated by the data reader.
+		///	</returns>
+		public async Task<TResult> ExecuteReaderAsync<TResult>(CommandBehavior behavior, Func<TDbDataReader, Task<TResult>> readerDelegate)
 		{
 			OscException readerDelegateException = null;
-			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
+			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
 
-			if (!isOpened)
+			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				await _cmd.Connection.OpenAsync();
 			}
+
+			EnsureTransaction();
 
 			try
 			{
@@ -419,15 +456,17 @@ namespace openSourceC.FrameworkLibrary.Data
 					_cmd.Prepare();
 				}
 
-				using (TDbDataReader dr = (TDbDataReader)_cmd.ExecuteReader(behavior))
+				using (TDbDataReader dr = (TDbDataReader)await _cmd.ExecuteReaderAsync(behavior))
 				{
 					try
 					{
-						readerDelegate(dr);
+						return await readerDelegate(dr);
 					}
 					catch (Exception ex)
 					{
 						readerDelegateException = (ex is OscException ? (OscException)ex : new ReaderDelegateException(_cmd, ex));
+
+						return default(TResult);
 					}
 					finally
 					{
@@ -437,7 +476,7 @@ namespace openSourceC.FrameworkLibrary.Data
 			}
 			finally
 			{
-				if (!isOpened)
+				if (isClosed)
 				{
 					//_cmd.Connection.Close();
 				}
@@ -451,77 +490,44 @@ namespace openSourceC.FrameworkLibrary.Data
 
 		/// <summary>
 		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" />, and
-		///		returns a <see cref="T:TFillObject"/>.
+		///		returns a <see cref="T:TResult"/>.
 		/// </summary>
-		/// <typeparam name="TFillObject">The type of the object to return.</typeparam>
+		/// <typeparam name="TResult">The type of the object to return.</typeparam>
 		/// <param name="readerDelegate">The delegate that processes the data reader and returns a
-		///		<see cref="T:TFillObject"/> object.</param>
+		///		<see cref="T:TResult"/> object.</param>
 		///	<returns>
-		///		A <see cref="T:TFillObject"/> object populated by the data reader.
+		///		A <see cref="T:TResult"/> object populated by the data reader.
 		///	</returns>
-		public TFillObject ExecuteReader<TFillObject>(DbReaderDelegate<TDbDataReader, TFillObject> readerDelegate)
+		public async Task<TResult> ExecuteReaderAsync<TResult>(Func<TDbDataReader, Task<TResult>> readerDelegate)
 		{
-			return ExecuteReader<TFillObject>(CommandBehavior.Default, readerDelegate);
+			return await ExecuteReaderAsync<TResult>(CommandBehavior.Default, readerDelegate);
 		}
 
 		/// <summary>
 		///		Executes the <see cref="CommandText" /> against the <see cref="Connection" /> using
-		///		one of the <see cref="CommandBehavior" /> values, and returns a <see cref="T:TFillObject"/>.
+		///		one of the <see cref="CommandBehavior" /> values.
 		/// </summary>
-		/// <typeparam name="TFillObject">The type of the object to return.</typeparam>
 		/// <param name="behavior">One of the <see cref="P:CommandBehavior"/> values.</param>
-		/// <param name="readerDelegate">The delegate that processes the data reader and returns a
-		///		<see cref="T:TFillObject"/> object.</param>
 		///	<returns>
-		///		A <see cref="T:TFillObject"/> object populated by the data reader.
+		///		A <see cref="T:TDbDataReader"/> object.
 		///	</returns>
-		public TFillObject ExecuteReader<TFillObject>(CommandBehavior behavior, DbReaderDelegate<TDbDataReader, TFillObject> readerDelegate)
+		public async Task<TDbDataReader> ExecuteReaderAsync(CommandBehavior behavior)
 		{
-			OscException readerDelegateException = null;
-			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
+			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
 
-			if (!isOpened)
+			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				await _cmd.Connection.OpenAsync();
 			}
 
-			try
+			EnsureTransaction();
+
+			if (AutoPrepare)
 			{
-				if (AutoPrepare)
-				{
-					_cmd.Prepare();
-				}
-
-				using (TDbDataReader dr = (TDbDataReader)_cmd.ExecuteReader(behavior))
-				{
-					try
-					{
-						return readerDelegate(dr);
-					}
-					catch (Exception ex)
-					{
-						readerDelegateException = (ex is OscException ? (OscException)ex : new ReaderDelegateException(_cmd, ex));
-
-						return default(TFillObject);
-					}
-					finally
-					{
-						dr.Close();
-					}
-				}
+				_cmd.Prepare();
 			}
-			finally
-			{
-				if (!isOpened)
-				{
-					//_cmd.Connection.Close();
-				}
 
-				if (readerDelegateException != null)
-				{
-					throw readerDelegateException;
-				}
-			}
+			return (TDbDataReader)await _cmd.ExecuteReaderAsync(behavior);
 		}
 
 		/// <summary>
@@ -534,12 +540,27 @@ namespace openSourceC.FrameworkLibrary.Data
 		///	</returns>
 		public object ExecuteScalar()
 		{
-			bool isOpened = (_cmd.Connection.State == ConnectionState.Open);
+			return Task.Run(() => ExecuteScalarAsync()).Result;
+		}
 
-			if (!isOpened)
+		/// <summary>
+		///		Executes the query, and returns the first column of the first row in the result set
+		///		returned by the query. Additional columns or rows are ignored.
+		/// </summary>
+		/// <returns>
+		///		The first column of the first row in the result set, or a null reference
+		///		(<b>Nothing</b> in Visual Basic) if the result set is empty.
+		///	</returns>
+		public async Task<object> ExecuteScalarAsync()
+		{
+			bool isClosed = (_cmd.Connection.State == ConnectionState.Closed);
+
+			if (isClosed)
 			{
-				_cmd.Connection.Open();
+				await _cmd.Connection.OpenAsync();
 			}
+
+			EnsureTransaction();
 
 			try
 			{
@@ -548,11 +569,11 @@ namespace openSourceC.FrameworkLibrary.Data
 					_cmd.Prepare();
 				}
 
-				return _cmd.ExecuteScalar();
+				return await _cmd.ExecuteScalarAsync();
 			}
 			finally
 			{
-				if (!isOpened)
+				if (isClosed)
 				{
 					//_cmd.Connection.Close();
 				}
@@ -579,6 +600,18 @@ namespace openSourceC.FrameworkLibrary.Data
 		public override string ToString()
 		{
 			return DbHelper.CommandToString(_cmd);
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		private void EnsureTransaction()
+		{
+			if (_cmd.Transaction == null && _factory.Transaction != null)
+			{
+				_cmd.Transaction = _factory.Transaction;
+			}
 		}
 
 		#endregion

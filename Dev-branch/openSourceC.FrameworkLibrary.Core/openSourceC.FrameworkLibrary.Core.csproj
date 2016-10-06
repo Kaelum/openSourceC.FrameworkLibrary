@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>openSourceC.FrameworkLibrary</RootNamespace>
     <AssemblyName>openSourceC.FrameworkLibrary.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -50,6 +50,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -60,6 +61,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +72,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -80,6 +83,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -90,6 +94,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -100,11 +105,12 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\.packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -119,53 +125,64 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstraction\AbstractAccessPointProvider.cs" />
     <Compile Include="Abstraction\AbstractProvider.cs" />
-    <Compile Include="Abstraction\AbstractProxyProvider.cs" />
+    <Compile Include="Abstraction\AbstractProviderBase.cs" />
+    <Compile Include="Abstraction\DbAbstractProvider.cs" />
+    <Compile Include="Abstraction\DbAbstractProviderBase.cs" />
+    <Compile Include="Abstraction\DbProxyProvider.cs" />
+    <Compile Include="Abstraction\NamedAbstractProvider.cs" />
+    <Compile Include="Abstraction\NamedAbstractProviderBase.cs" />
+    <Compile Include="Abstraction\ProxyProvider.cs" />
+    <Compile Include="Abstraction\ProxyProviderBase.cs" />
+    <Compile Include="Abstraction\RemotingProviderBase.cs" />
     <Compile Include="Attribute\ActionNameAttribute.cs" />
     <Compile Include="Attribute\RelatedTypeAttribute.cs" />
     <Compile Include="Business\BusinessFacadeBase.cs" />
+    <Compile Include="ComponentModel\ByteArrayConverter.cs" />
     <Compile Include="Configuration\ConfigurationSectionManager.cs" />
-    <Compile Include="Configuration\ProxySettings.cs" />
-    <Compile Include="Configuration\ProxySettingsCollection.cs" />
+    <Compile Include="Configuration\DbProviderElement.cs" />
+    <Compile Include="Configuration\DbProviderElementCollection.cs" />
+    <Compile Include="Configuration\NamedElementCollection.cs" />
+    <Compile Include="Configuration\NamedElement.cs" />
+    <Compile Include="Configuration\NamedProviderElement.cs" />
+    <Compile Include="Configuration\NamedProviderElementCollection.cs" />
+    <Compile Include="Configuration\ProviderElement.cs" />
     <Compile Include="Configuration\SettingSettings.cs" />
     <Compile Include="Configuration\SettingSettingsCollection.cs" />
+    <Compile Include="Core\Encryption.cs" />
     <Compile Include="Core\Enumerators.cs" />
     <Compile Include="Core\EnumHelper.cs" />
-    <Compile Include="Core\Exceptions\NullValueException.cs" />
-    <Compile Include="Extensions\EnumExtensions.cs" />
-    <Compile Include="Extensions\NullTestExtensions.cs" />
-    <Compile Include="Core\HexConvert.cs" />
-    <Compile Include="Core\Encryption.cs" />
     <Compile Include="Core\Exceptions\Exceptions.cs" />
+    <Compile Include="Core\Exceptions\NullValueException.cs" />
     <Compile Include="Core\Format.cs" />
+    <Compile Include="Core\HexConvert.cs" />
     <Compile Include="Core\Impersonation.cs" />
     <Compile Include="Core\NonNullable.cs" />
     <Compile Include="Core\Parse.cs" />
+    <Compile Include="Core\RegexHelper.cs" />
     <Compile Include="Core\ReturnObject.cs" />
-    <Compile Include="Core\SR.cs" />
+    <Compile Include="Core\Singleton.cs" />
+    <Compile Include="Core\SR.cs">
+      <DependentUpon>SR.resx</DependentUpon>
+    </Compile>
     <Compile Include="Core\SR.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SR.resx</DependentUpon>
     </Compile>
+    <Compile Include="Core\StringValidate.cs" />
+    <Compile Include="Core\XmlSerialize.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\NullTestExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Core\XmlSerialize.cs" />
-    <Compile Include="ComponentModel\ByteArrayConverter.cs" />
     <Compile Include="Logging\Enumerators.cs" />
     <Compile Include="Logging\EventLogEvent.cs" />
     <Compile Include="Logging\LocationInfo.cs" />
     <Compile Include="Logging\MessageEventArgs.cs" />
     <Compile Include="Logging\OscLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\Singleton.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Core\StringValidate.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Remote\RemoteFactoryProvider.cs" />
     <Compile Include="Remote\RemoteFactoryProviderAccessor.cs" />
   </ItemGroup>
@@ -195,7 +212,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Core\SR.resx">
       <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGeneratorEx</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SR.Designer.cs</LastGenOutput>
       <CustomToolNamespace>openSourceC.FrameworkLibrary</CustomToolNamespace>
     </EmbeddedResource>
@@ -206,7 +223,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
@@ -218,7 +235,7 @@
 	attrib -R "$(ProjectDir)..\.bin\$(PlatformName)\$(ConfigurationName)\$(TargetName).*"
 	del /Q "$(ProjectDir)..\.bin\$(PlatformName)\$(ConfigurationName)\$(TargetName).*"
 )</PreBuildEvent>
-    <PostBuildEvent>if not exist "$(ProjectDir)..\.bin\$(PlatformName)\$(ConfigurationName)\" (
+    <PostBuildEvent>if not exist "$(ProjectDir)..\.bin\$(PlatformName)\$(ConfigurationName)\." (
 	md "$(ProjectDir)..\.bin\$(PlatformName)\$(ConfigurationName)\"
 )
 

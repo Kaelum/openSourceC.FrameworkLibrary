@@ -57,7 +57,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///     not a null reference, the current exception is raised in a
 		///     catch block that handles the inner exception.</param>
 		public ReaderDelegateException(DbCommand command, Exception innerException)
-			: base(null, innerException) { SaveParameters(command); }
+			: base(innerException.Message, innerException) { SaveParameters(command); }
 
 		/// <summary>
 		///		Initializes a new instance of the <see cref="ReaderDelegateException" />

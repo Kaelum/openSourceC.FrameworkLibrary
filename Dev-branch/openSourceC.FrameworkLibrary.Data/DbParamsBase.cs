@@ -27,10 +27,10 @@ namespace openSourceC.FrameworkLibrary.Data
 		private bool _disposed = false;
 
 
-		#region Class Constructors & Destructor
+		#region Constructors
 
 		/// <summary>
-		///		Class constructor.
+		///		Creates an instance of DbParamsBase.
 		/// </summary>
 		protected DbParamsBase() { }
 
