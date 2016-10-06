@@ -33,7 +33,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///     Gets the default connection timeout.
 		/// </summary>
-		protected override int DefaultConnectionTimeout
+		protected internal override int DefaultConnectionTimeout
 		{
 			get { return DEFAULT_CONNECTION_TIMEOUT; }
 		}

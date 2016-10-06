@@ -14,6 +14,7 @@ namespace openSourceC.FrameworkLibrary
 	///		events to the Message event in the wrapper.  This works nicely with WPF applications
 	///		where you can log events to a ListView control.
 	/// </summary>
+	[Serializable]
 	public class OscLog
 	{
 		/// <summary>
@@ -192,6 +193,15 @@ namespace openSourceC.FrameworkLibrary
 			DefaultLoggerName = loggerName;
 		}
 
+		/// <summary>
+		///		Sets the default logger to an existing logger instance.
+		/// </summary>
+		/// <param name="logger">An existing <see cref="T:OscLog"/> object.</param>
+		public static void SetDefaultLogger(OscLog logger)
+		{
+			_defaultInstance = logger;
+		}
+
 		#endregion
 
 		#region Debug
@@ -285,7 +295,8 @@ namespace openSourceC.FrameworkLibrary
 		{
 			if (_iLog.IsDebugEnabled)
 			{
-				_iLog.Logger.Log(_thisDeclaringType, Level.Debug, message, exception);
+				//_iLog.Logger.Log(_thisDeclaringType, Level.Debug, message, exception);
+				_iLog.Logger.Log(_thisDeclaringType, Level.Debug, GetLoggerMessage(exception, message), null);
 
 				EventHandler<MessageEventArgs> messageEvent = Message;
 
@@ -391,7 +402,8 @@ namespace openSourceC.FrameworkLibrary
 		{
 			if (_iLog.IsErrorEnabled)
 			{
-				_iLog.Logger.Log(_thisDeclaringType, Level.Error, message, exception);
+				//_iLog.Logger.Log(_thisDeclaringType, Level.Error, message, exception);
+				_iLog.Logger.Log(_thisDeclaringType, Level.Error, GetLoggerMessage(exception, message), null);
 
 				EventHandler<MessageEventArgs> messageEvent = Message;
 
@@ -497,7 +509,8 @@ namespace openSourceC.FrameworkLibrary
 		{
 			if (_iLog.IsFatalEnabled)
 			{
-				_iLog.Logger.Log(_thisDeclaringType, Level.Fatal, message, exception);
+				//_iLog.Logger.Log(_thisDeclaringType, Level.Fatal, message, exception);
+				_iLog.Logger.Log(_thisDeclaringType, Level.Fatal, GetLoggerMessage(exception, message), null);
 
 				EventHandler<MessageEventArgs> messageEvent = Message;
 
@@ -603,7 +616,8 @@ namespace openSourceC.FrameworkLibrary
 		{
 			if (_iLog.IsInfoEnabled)
 			{
-				_iLog.Logger.Log(_thisDeclaringType, Level.Info, message, exception);
+				//_iLog.Logger.Log(_thisDeclaringType, Level.Info, message, exception);
+				_iLog.Logger.Log(_thisDeclaringType, Level.Info, GetLoggerMessage(exception, message), null);
 
 				EventHandler<MessageEventArgs> messageEvent = Message;
 
@@ -709,7 +723,8 @@ namespace openSourceC.FrameworkLibrary
 		{
 			if (_iLog.IsWarnEnabled)
 			{
-				_iLog.Logger.Log(_thisDeclaringType, Level.Warn, message, exception);
+				//_iLog.Logger.Log(_thisDeclaringType, Level.Warn, message, exception);
+				_iLog.Logger.Log(_thisDeclaringType, Level.Warn, GetLoggerMessage(exception, message), null);
 
 				EventHandler<MessageEventArgs> messageEvent = Message;
 
@@ -719,6 +734,24 @@ namespace openSourceC.FrameworkLibrary
 
 					messageEvent(this, messageEventArgs);
 				}
+			}
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		private string GetLoggerMessage(Exception exception, string message)
+		{
+			if (exception == null)
+			{
+				LocationInfo location = new LocationInfo(_thisDeclaringType);
+
+				return string.Format("{0}.{1}: line {2}: {3}", location.ClassName, location.MethodName, location.LineNumber, message);
+			}
+			else
+			{
+				return Format.Exception(exception, message);
 			}
 		}
 

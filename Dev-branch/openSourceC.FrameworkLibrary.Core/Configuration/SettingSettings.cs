@@ -8,6 +8,7 @@ namespace openSourceC.FrameworkLibrary.Configuration
 	/// <summary>
 	///		Represents a single, named connection string in the connection strings configuration file section.
 	///	</summary>
+	[Obsolete("This object is now obsolete.  Merge all uses into your DbProviderElement, which is a merged version of ProviderSettings and SettingSettings.")]
 	public sealed class SettingSettings : ConfigurationElement
 	{
 		private NameValueCollection _parameters;
@@ -54,7 +55,9 @@ namespace openSourceC.FrameworkLibrary.Configuration
 			{
 				if (_parameters == null)
 				{
-					lock (this)
+					SettingSettings settings = this;
+
+					lock (settings)
 					{
 						if (_parameters == null)
 						{
@@ -62,7 +65,14 @@ namespace openSourceC.FrameworkLibrary.Configuration
 
 							foreach (ConfigurationProperty property in Properties)
 							{
-								_parameters.Add(property.Name, (string)base[property]);
+								if (
+									!"applicationName".Equals(property.Name)
+									&& !"connectionStringName".Equals(property.Name)
+									&& !"name".Equals(property.Name)
+								)
+								{
+									_parameters.Add(property.Name, (string)base[property]);
+								}
 							}
 						}
 					}
@@ -91,21 +101,6 @@ namespace openSourceC.FrameworkLibrary.Configuration
 			base[property] = value;
 
 			return true;
-		}
-
-		/// <summary>
-		///		Gets a value indicating whether an unknown element is encountered during
-		///		deserialization.
-		/// </summary>
-		/// <param name="elementName">The name of the unknown subelement.</param>
-		/// <param name="reader">The <see cref="XmlReader"/> being used for deserialization</param>
-		/// <returns>
-		///		<b>true</b> when an unknown element is encountered while deserializing; otherwise,
-		///		<b>false</b>.
-		/// </returns>
-		protected override bool OnDeserializeUnrecognizedElement(string elementName, XmlReader reader)
-		{
-			return false;
 		}
 
 		#endregion

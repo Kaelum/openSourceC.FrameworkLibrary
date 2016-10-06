@@ -10,7 +10,7 @@ namespace openSourceC.FrameworkLibrary.Business
 		private bool _disposed = false;
 
 
-		#region Destructor
+		#region IDisposable Implementation
 
 		/// <summary>
 		///		This destructor will run only if the Dispose method does not get called.
@@ -20,10 +20,6 @@ namespace openSourceC.FrameworkLibrary.Business
 		{
 			Dispose(false);
 		}
-
-		#endregion
-
-		#region IDisposable Implmentation
 
 		/// <summary>
 		///		Dispose of 

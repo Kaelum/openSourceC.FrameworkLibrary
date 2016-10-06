@@ -1,3 +1,5 @@
+#define USE_EXCEPTION_TOSTRING
+
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -166,11 +168,28 @@ namespace openSourceC.FrameworkLibrary
 				}
 			}
 
+#if USE_EXCEPTION_TOSTRING
+			if (strBuilder.Length != 0)
+			{
+				strBuilder
+					.Append(Environment.NewLine)
+					.Append(Environment.NewLine);
+			}
+
+			string exceptionToString = e.ToString();
+			exceptionToString = exceptionToString == null ? null : exceptionToString.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+
+			strBuilder.Append(exceptionToString);
+#endif
+
 			while (e != null)
 			{
+#if !USE_EXCEPTION_TOSTRING
 				if (strBuilder.Length != 0)
 				{
-					strBuilder.Append(Environment.NewLine).Append(Environment.NewLine);
+					strBuilder
+						.Append(Environment.NewLine)
+						.Append(Environment.NewLine);
 				}
 
 				strBuilder.Append(e.GetType());
@@ -180,10 +199,18 @@ namespace openSourceC.FrameworkLibrary
 					strBuilder.AppendFormat(" (0x{0,8:X})", ((System.Runtime.InteropServices.ExternalException)e).ErrorCode);
 				}
 
-				string message = (e.Message == null ? null : e.Message.Replace("\n", Environment.NewLine));
-				string stackTrace = (e.StackTrace == null ? null : e.StackTrace.Replace("\n", Environment.NewLine));
+				string message = (e.Message == null ? null : e.Message);
+				string stackTrace = (e.StackTrace == null ? null : e.StackTrace.Replace("\r\n", "\n").Replace("\n", Environment.NewLine));
 
-				strBuilder.AppendFormat(": {0}{2}{1}", message, stackTrace, Environment.NewLine);
+				strBuilder
+					.Append(": ")
+					.Append(message)
+					.Append(Environment.NewLine)
+					.Append(Environment.NewLine)
+					.Append("Stack Trace:")
+					.Append(Environment.NewLine)
+					.Append(stackTrace);
+#endif
 
 				if (e is OscException)
 				{
@@ -191,18 +218,27 @@ namespace openSourceC.FrameworkLibrary
 
 					if (!string.IsNullOrWhiteSpace(ex.ExtendedMessage))
 					{
-						strBuilder.AppendFormat("{0}Extended Message:{0}{1}", Environment.NewLine, ex.ExtendedMessage);
+						strBuilder
+							.Append(Environment.NewLine)
+							.Append(Environment.NewLine)
+							.Append("Extended Message:")
+							.Append(Environment.NewLine)
+							.Append(ex.ExtendedMessage);
 					}
 				}
 				else if (e is System.Data.SqlClient.SqlException)
 				{
 					System.Data.SqlClient.SqlException ex = (System.Data.SqlClient.SqlException)e;
 
-					strBuilder.AppendFormat("{0}SQL Errors:{0}", Environment.NewLine);
+					strBuilder
+						.Append(Environment.NewLine)
+						.Append(Environment.NewLine)
+						.Append("SQL Errors:")
+						.Append(Environment.NewLine);
 
 					for (int i = 0; i < ex.Errors.Count; i++)
 					{
-						strBuilder.AppendFormat("\t{1}: Msg {2}, Level {3}, State {4}, Line {5}{0}\t\tSource: {6}{0}\t\tProcedure: {7}\t\t{8}",
+						strBuilder.AppendFormat("\t{1}: Msg {2}, Level {3}, State {4}, Line {5}{0}\t\tSource: {6}{0}\t\tProcedure: {7}{0}\t\tMessage: {8}",
 							Environment.NewLine,
 							i,
 							ex.Errors[i].Number,

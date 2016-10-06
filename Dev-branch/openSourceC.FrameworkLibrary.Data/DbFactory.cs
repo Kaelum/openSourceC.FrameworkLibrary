@@ -21,7 +21,7 @@ namespace openSourceC.FrameworkLibrary.Data
 	/// <typeparam name="TDbDataReader"></typeparam>
 	public abstract class DbFactory<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader> : IDisposable
 		where TDbFactory : DbFactory<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>
-		where TDbFactoryCommand : DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>, new()
+		where TDbFactoryCommand : DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>, new()
 		where TDbParams : DbParamsBase<TDbParams, TDbCommand, TDbParameter>, new()
 		where TDbConnection : DbConnection
 		where TDbTransaction : DbTransaction
@@ -100,6 +100,7 @@ namespace openSourceC.FrameworkLibrary.Data
 				{
 					if (_transaction != null)
 					{
+						_transaction.Rollback();
 						_transaction.Dispose();
 						_transaction = null;
 					}
@@ -131,7 +132,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///		Gets the connection object of this instance.
 		/// </summary>
-		protected TDbConnection Connection
+		protected internal TDbConnection Connection
 		{
 			get
 			{
@@ -192,7 +193,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///     Gets the default connection timeout.
 		/// </summary>
-		protected virtual int DefaultConnectionTimeout
+		protected internal virtual int DefaultConnectionTimeout
 		{
 			get { return DEFAULT_CONNECTION_TIMEOUT; }
 		}
@@ -200,7 +201,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <summary>
 		///		Gets the current <see cref="T:TDbTransaction"/>.
 		/// </summary>
-		protected TDbTransaction Transaction
+		protected internal TDbTransaction Transaction
 		{
 			get { return _transaction; }
 			set { _transaction = value; }
@@ -273,7 +274,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <returns></returns>
 		public TDbFactoryCommand CreateStoredProcedureCommand(string commandText)
 		{
-			return DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create(commandText, CommandType.StoredProcedure, Connection, false);
+			return DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create((TDbFactory)this, commandText, CommandType.StoredProcedure, false);
 		}
 
 		/// <summary>
@@ -283,7 +284,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <returns></returns>
 		public TDbFactoryCommand CreateTableDirectCommand(string commandText)
 		{
-			return DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create(commandText, CommandType.TableDirect, Connection, false);
+			return DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create((TDbFactory)this, commandText, CommandType.TableDirect, false);
 		}
 
 		/// <summary>
@@ -293,7 +294,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <returns></returns>
 		public TDbFactoryCommand CreateTextCommand(string commandText)
 		{
-			return DbFactoryCommand<TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create(commandText, CommandType.Text, Connection, false);
+			return DbFactoryCommand<TDbFactory, TDbFactoryCommand, TDbParams, TDbConnection, TDbTransaction, TDbCommand, TDbParameter, TDbDataAdapter, TDbDataReader>.Create((TDbFactory)this, commandText, CommandType.Text, false);
 		}
 
 		#endregion
@@ -305,6 +306,11 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// </summary>
 		public void BeginTransaction()
 		{
+			if (Connection.State == ConnectionState.Closed)
+			{
+				Connection.Open();
+			}
+
 			_transaction = (TDbTransaction)Connection.BeginTransaction();
 		}
 
@@ -314,6 +320,11 @@ namespace openSourceC.FrameworkLibrary.Data
 		/// <param name="isolationLevel">One of the <see cref="T:IsolationLevel"/> values.</param>
 		public void BeginTransaction(IsolationLevel isolationLevel)
 		{
+			if (Connection.State == ConnectionState.Closed)
+			{
+				Connection.Open();
+			}
+
 			_transaction = (TDbTransaction)Connection.BeginTransaction(isolationLevel);
 		}
 
@@ -328,6 +339,8 @@ namespace openSourceC.FrameworkLibrary.Data
 			}
 
 			_transaction.Commit();
+			_transaction.Dispose();
+			_transaction = null;
 		}
 
 		/// <summary>
@@ -341,6 +354,8 @@ namespace openSourceC.FrameworkLibrary.Data
 			}
 
 			_transaction.Rollback();
+			_transaction.Dispose();
+			_transaction = null;
 		}
 
 		#endregion

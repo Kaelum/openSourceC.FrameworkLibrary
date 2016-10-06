@@ -1,6 +1,6 @@
 ﻿ALTER DATABASE [$(DatabaseName)]
 	ADD FILE (
-		NAME = [FrameworkLibraryApplication],
+		NAME = [openSourceC.FrameworkLibrary],
 		FILENAME = '$(DefaultDataPath)$(DatabaseName).mdf',
 		SIZE = 10240 KB,
 		FILEGROWTH = 10240 KB
@@ -10,7 +10,7 @@ GO
 
 ALTER DATABASE [$(DatabaseName)]
 	ADD LOG FILE (
-		NAME = [FrameworkLibraryApplication_log],
+		NAME = [openSourceC.FrameworkLibrary_log],
 		FILENAME = '$(DefaultLogPath)$(DatabaseName).ldf',
 		SIZE = 10240 KB,
 		MAXSIZE = 2097152 MB,

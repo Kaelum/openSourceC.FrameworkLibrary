@@ -8,16 +8,16 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{f4841e22-df52-4a7e-b658-31ba062be491}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>openSourceC.FrameworkLibrary__Database_</RootNamespace>
-    <AssemblyName>openSourceC.FrameworkLibrary__Database_</AssemblyName>
+    <RootNamespace>openSourceC.FrameworkLibrary.Database</RootNamespace>
+    <AssemblyName>openSourceC.FrameworkLibrary.Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -38,7 +38,7 @@
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\x64\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DebugSymbols>true</DebugSymbols>
@@ -48,7 +48,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\x64\Debug\openSourceC.FrameworkLibrary__Database_.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\openSourceC.FrameworkLibrary.Database.xml</DocumentationFile>
     <PlatformTarget>x64</PlatformTarget>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
@@ -89,7 +89,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\openSourceC.FrameworkLibrary__Database_.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\openSourceC.FrameworkLibrary.Database.xml</DocumentationFile>
     <PlatformTarget>x64</PlatformTarget>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
@@ -150,12 +150,12 @@
     <Build Include="Schemas\Core\Tables\Core.EventLog.sql" />
     <Build Include="Schemas\Core\Tables\Core.SchemaVersions.sql" />
     <Build Include="Schemas\Core\Core.sql" />
-    <Build Include="Security\Database Roles\FrameworkLibraryApplicationAccess.sql" />
+    <Build Include="Security\Database Roles\FrameworkLibraryAccess.sql" />
     <None Include="Security\Logins\_Hashed_Passwords.sql" />
-    <Build Include="Security\Logins\IIS APPPOOL_FrameworkLibraryApplicationAppPool.sql" />
+    <Build Include="Security\Logins\IIS APPPOOL_FrameworkLibraryAppPool.sql" />
     <Build Include="Security\Logins\sa.sql" />
-    <Build Include="Security\Users\IIS APPPOOL_FrameworkLibraryApplicationAppPool.sql" />
-    <Build Include="Storage\Filegroups\Files\PRIMARY.FrameworkLibraryApplication.sql" />
+    <Build Include="Security\Users\IIS APPPOOL_FrameworkLibraryAppPool.sql" />
+    <Build Include="Storage\Filegroups\Files\PRIMARY.openSourceC.FrameworkLibrary.sql" />
     <PostDeploy Include="Support Scripts\Post-Deployment\PostDeployment.sql" />
     <PreDeploy Include="Support Scripts\Pre-Deployment\PreDeployment.sql" />
     <None Include="Support Scripts\Seeds\Seed Database.sql" />

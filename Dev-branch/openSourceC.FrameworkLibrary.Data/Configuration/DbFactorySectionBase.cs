@@ -12,18 +12,10 @@ namespace openSourceC.FrameworkLibrary.Configuration
 
 		/// <summary></summary>
 		[ConfigurationProperty("providers", IsRequired = true)]
-		[ConfigurationCollection(typeof(ProviderSettingsCollection))]
-		public ProviderSettingsCollection Providers
+		[ConfigurationCollection(typeof(DbProviderElementCollection))]
+		public DbProviderElementCollection Providers
 		{
-			get { return (ProviderSettingsCollection)base["providers"]; }
-		}
-
-		/// <summary></summary>
-		[ConfigurationProperty("settings", IsRequired = false)]
-		[ConfigurationCollection(typeof(SettingSettingsCollection))]
-		public SettingSettingsCollection Settings
-		{
-			get { return (SettingSettingsCollection)base["settings"]; }
+			get { return (DbProviderElementCollection)base["providers"]; }
 		}
 
 		#endregion

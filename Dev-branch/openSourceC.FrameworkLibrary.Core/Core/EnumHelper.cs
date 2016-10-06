@@ -201,7 +201,7 @@ namespace openSourceC.FrameworkLibrary
 
 			foreach (FieldInfo field in fieldArray)
 			{
-				if (((RelatedTypeAttribute[])field.GetCustomAttributes(typeof(RelatedTypeAttribute), false)).Any(t => t.Type.Equals(type)))
+				if (((RelatedTypeAttribute[])field.GetCustomAttributes(typeof(RelatedTypeAttribute), false)).Any(t => t.Type == null ? type == null : t.Type.Equals(type)))
 				{
 					result = (TEnum)field.GetRawConstantValue();
 					return true;

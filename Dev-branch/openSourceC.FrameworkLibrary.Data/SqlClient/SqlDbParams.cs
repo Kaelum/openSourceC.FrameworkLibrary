@@ -383,9 +383,8 @@ namespace openSourceC.FrameworkLibrary.Data
 			else
 			{
 				using (StringReader stringReader = new StringReader(value))
-				using (XmlReader xmlReader = XmlReader.Create(stringReader))
 				{
-					sqlXml = new SqlXml(xmlReader);
+					sqlXml = new SqlXml(XmlReader.Create(stringReader));
 				}
 			}
 
@@ -420,10 +419,7 @@ namespace openSourceC.FrameworkLibrary.Data
 		///	<returns>Returns a <see cref="SqlParameter"/> object.</returns>
 		public SqlParameter AddXml(string parameterName, bool isNullable, XElement element, ParameterDirection direction = ParameterDirection.Input)
 		{
-			using (XmlReader xmlReader = element.CreateReader())
-			{
-				return AddXml(parameterName, isNullable, new SqlXml(xmlReader), direction);
-			}
+			return AddXml(parameterName, isNullable, new SqlXml(element.CreateReader()), direction);
 		}
 
 		/// <summary>
@@ -439,23 +435,25 @@ namespace openSourceC.FrameworkLibrary.Data
 		{
 			XmlWriterSettings xmlWriterSettings = new XmlWriterSettings
 			{
-				ConformanceLevel = ConformanceLevel.Document,
+				CloseOutput = false,
+				ConformanceLevel = ConformanceLevel.Fragment,
 				OmitXmlDeclaration = true,
 				Encoding = Encoding.UTF8,
 				NamespaceHandling = NamespaceHandling.OmitDuplicates,
 			};
 
-			using (MemoryStream stream = new MemoryStream())
+			MemoryStream stream = new MemoryStream();
+
 			// This XmlWriter ensures that the XML is formatted correctly.
 			using (XmlWriter xmlWriter = XmlWriter.Create(stream, xmlWriterSettings))
 			{
 				element.WriteTo(xmlWriter);
-
 				xmlWriter.Flush();
-				stream.Seek(0L, SeekOrigin.Begin);
-
-				return AddXml(parameterName, isNullable, new SqlXml(stream), direction);
 			}
+
+			stream.Seek(0L, SeekOrigin.Begin);
+
+			return AddXml(parameterName, isNullable, new SqlXml(stream), direction);
 		}
 
 		/// <summary>

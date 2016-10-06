@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openSourceC.FrameworkLibrary.Core", "openSourceC.FrameworkLibrary.Core\openSourceC.FrameworkLibrary.Core.csproj", "{D5E60952-0F68-4676-A3B5-7BE1E61653E8}"
 EndProject
@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1893BC
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
-		packages\repositories.config = packages\repositories.config
+		.packages\repositories.config = .packages\repositories.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".resources", ".resources", "{D2505B9E-A201-4D0F-A853-E3E3C296B787}"
@@ -30,30 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".resources", ".resources", 
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs33
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = openSourceC.FrameworkLibrary.Core\\openSourceC.FrameworkLibrary.Core.csproj
-		SccProjectName1 = openSourceC.FrameworkLibrary.Core
-		SccLocalPath1 = openSourceC.FrameworkLibrary.Core
-		SccProjectUniqueName2 = openSourceC.FrameworkLibrary.Data\\openSourceC.FrameworkLibrary.Data.csproj
-		SccProjectName2 = openSourceC.FrameworkLibrary.Data
-		SccLocalPath2 = openSourceC.FrameworkLibrary.Data
-		SccProjectUniqueName3 = openSourceC.FrameworkLibrary.Design\\openSourceC.FrameworkLibrary.Design.csproj
-		SccProjectName3 = openSourceC.FrameworkLibrary.Design
-		SccLocalPath3 = openSourceC.FrameworkLibrary.Design
-		SccProjectUniqueName4 = openSourceC.FrameworkLibrary.Web\\openSourceC.FrameworkLibrary.Web.csproj
-		SccProjectName4 = openSourceC.FrameworkLibrary.Web
-		SccLocalPath4 = openSourceC.FrameworkLibrary.Web
-		SccProjectUniqueName5 = openSourceC.FrameworkLibrary.Windows\\openSourceC.FrameworkLibrary.Windows.csproj
-		SccProjectName5 = openSourceC.FrameworkLibrary.Windows
-		SccLocalPath5 = openSourceC.FrameworkLibrary.Windows
-		SccProjectUniqueName6 = openSourceC.FrameworkLibrary\u0020(Database)\\openSourceC.FrameworkLibrary\u0020(Database).sqlproj
-		SccProjectName6 = openSourceC.FrameworkLibrary\u0020(Database)
-		SccLocalPath6 = openSourceC.FrameworkLibrary\u0020(Database)
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -132,5 +108,29 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs33
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = openSourceC.FrameworkLibrary.Core\\openSourceC.FrameworkLibrary.Core.csproj
+		SccProjectName1 = openSourceC.FrameworkLibrary.Core
+		SccLocalPath1 = openSourceC.FrameworkLibrary.Core
+		SccProjectUniqueName2 = openSourceC.FrameworkLibrary.Data\\openSourceC.FrameworkLibrary.Data.csproj
+		SccProjectName2 = openSourceC.FrameworkLibrary.Data
+		SccLocalPath2 = openSourceC.FrameworkLibrary.Data
+		SccProjectUniqueName3 = openSourceC.FrameworkLibrary.Design\\openSourceC.FrameworkLibrary.Design.csproj
+		SccProjectName3 = openSourceC.FrameworkLibrary.Design
+		SccLocalPath3 = openSourceC.FrameworkLibrary.Design
+		SccProjectUniqueName4 = openSourceC.FrameworkLibrary.Web\\openSourceC.FrameworkLibrary.Web.csproj
+		SccProjectName4 = openSourceC.FrameworkLibrary.Web
+		SccLocalPath4 = openSourceC.FrameworkLibrary.Web
+		SccProjectUniqueName5 = openSourceC.FrameworkLibrary.Windows\\openSourceC.FrameworkLibrary.Windows.csproj
+		SccProjectName5 = openSourceC.FrameworkLibrary.Windows
+		SccLocalPath5 = openSourceC.FrameworkLibrary.Windows
+		SccProjectUniqueName6 = openSourceC.FrameworkLibrary\u0020(Database)\\openSourceC.FrameworkLibrary\u0020(Database).sqlproj
+		SccProjectName6 = openSourceC.FrameworkLibrary\u0020(Database)
+		SccLocalPath6 = openSourceC.FrameworkLibrary\u0020(Database)
 	EndGlobalSection
 EndGlobal

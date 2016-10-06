@@ -99,8 +99,8 @@ namespace openSourceC.FrameworkLibrary.Configuration
 		/// </summary>
 		/// <typeparam name="TConfigurationSection">The type of the configuration section.</typeparam>
 		/// <param name="allowAssignableFrom"><b>true</b> to allow the matching of configuration
-		///		sections that derive from <typeparamref name="TConfigurationSection"/>; otherwise,
-		///		<b>false</b>.  (Default: true)</param>
+		///		sections that can be assigned to an instance of <typeparamref name="TConfigurationSection"/>,
+		///		or <b>false</b> for an exact match.  (Default: false)</param>
 		/// <returns>
 		///		A <see cref="T:TConfigurationSection"/> object.
 		/// </returns>
@@ -115,8 +115,8 @@ namespace openSourceC.FrameworkLibrary.Configuration
 		/// </summary>
 		/// <typeparam name="TConfigurationSectionGroup">The type of the configuration section group.</typeparam>
 		/// <param name="allowAssignableFrom"><b>true</b> to allow the matching of configuration
-		///		sections that derive from <typeparamref name="TConfigurationSectionGroup"/>; otherwise,
-		///		<b>false</b>.  (Default: true)</param>
+		///		sections that can be assigned to an instance of <typeparamref name="TConfigurationSectionGroup"/>,
+		///		or <b>false</b> for an exact match.  (Default: false)</param>
 		/// <returns>
 		///		A <see cref="T:TConfigurationSectionGroup"/> object.
 		/// </returns>

@@ -6,6 +6,6 @@ namespace openSourceC.FrameworkLibrary.Data
 	/// <summary>
 	///		Summary description for SqlFactoryCommand.
 	/// </summary>
-	public sealed class SqlDbFactoryCommand : DbFactoryCommand<SqlDbFactoryCommand, SqlDbParams, SqlConnection, SqlTransaction, SqlCommand, SqlParameter, SqlDataAdapter, SqlDataReader>
+	public sealed class SqlDbFactoryCommand : DbFactoryCommand<SqlDbFactory, SqlDbFactoryCommand, SqlDbParams, SqlConnection, SqlTransaction, SqlCommand, SqlParameter, SqlDataAdapter, SqlDataReader>
 	{ }
 }

@@ -4,14 +4,12 @@ using System.Windows;
 namespace openSourceC.FrameworkLibrary.Windows
 {
 	/// <summary>
-	///		Popup exception MessageBox.
+	///		Pop-up exception MessageBox.
 	/// </summary>
 	public class ExceptionBox
 	{
-		// Disables external instanciation of this object.
-		private ExceptionBox()
-		{
-		}
+		// Disables external instantiation of this object.
+		private ExceptionBox() { }
 
 		/// <summary>
 		///		Displays a message box for an <code>OSCException</code> based exception.
@@ -28,7 +26,7 @@ namespace openSourceC.FrameworkLibrary.Windows
 			}
 			catch
 			{
-				try { return MessageBox.Show("An unexpected exception has occured while trying to display an exception.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error); }
+				try { return MessageBox.Show("An unexpected exception has occurred while trying to display an exception.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error); }
 				catch { return MessageBoxResult.None; }
 			}
 		}
@@ -37,7 +35,7 @@ namespace openSourceC.FrameworkLibrary.Windows
 		///		Displays a message box for an <see cref="OscException"/> based exception.
 		/// </summary>
 		/// <param name="ex">The exception to display.</param>
-		/// <param name="message">Additional message to display if the exception is not derrived from <code>OSCException</code>.</param>
+		/// <param name="message">Additional message to display if the exception is not derived from <code>OSCException</code>.</param>
 		/// <returns>One of the <see cref="MessageBoxResult"/> values.</returns>
 		public static MessageBoxResult Show(Exception ex, string message)
 		{
@@ -108,7 +106,7 @@ namespace openSourceC.FrameworkLibrary.Windows
 			}
 			catch
 			{
-				try { return MessageBox.Show("An unexpected exception has occured while trying to display an exception.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error); }
+				try { return MessageBox.Show("An unexpected exception has occurred while trying to display an exception.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error); }
 				catch { return MessageBoxResult.None; }
 			}
 		}

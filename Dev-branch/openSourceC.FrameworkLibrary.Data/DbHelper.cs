@@ -572,11 +572,9 @@ namespace openSourceC.FrameworkLibrary.Data
 
 			declareString = declareString.Append("DECLARE @rc int;\n");
 
-			if (setString.Length > 0)
-				setString.Append("\n");
+			if (setString.Length > 0) { setString.Append("\n"); }
+			if (printString.Length > 0) { printString.Append("\n"); }
 
-			if (printString.Length > 0)
-				printString.Append("\n");
 			printString.Append("PRINT 'Return Code: ' + CAST(@rc AS varchar(max));\n");
 
 			return string.Format("{0}\n{1}{2};\n\n{3}", declareString.ToString(), setString.ToString(), execString.ToString(), printString.ToString());
