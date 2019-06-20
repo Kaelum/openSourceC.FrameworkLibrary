@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication (Web Design View)", "TestApplication (Web Design View)\TestApplication (Web Design View).csproj", "{AB33AE58-9273-48E5-8CBF-2EE0B6BC2224}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs33
+		SccProjectUniqueName0 = TestApplication\u0020(Web\u0020Design\u0020View)\\TestApplication\u0020(Web\u0020Design\u0020View).csproj
+		SccProjectName0 = TestApplication\u0020(Web\u0020Design\u0020View)
+		SccLocalPath0 = TestApplication\u0020(Web\u0020Design\u0020View)
+		SccLocalPath1 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB33AE58-9273-48E5-8CBF-2EE0B6BC2224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB33AE58-9273-48E5-8CBF-2EE0B6BC2224}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB33AE58-9273-48E5-8CBF-2EE0B6BC2224}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB33AE58-9273-48E5-8CBF-2EE0B6BC2224}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

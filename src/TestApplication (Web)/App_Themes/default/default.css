@@ -1,0 +1,771 @@
+﻿@import url("../reset-fonts-grids.css");
+/*@import url("../base.css");*/
+
+/*
+=============================================================================
+  FONTS:
+=============================================================================
+  Per Yahoo! recommendations, specify all font sizes in percentages, which
+  render more consistently across browsers, and scale properly when users
+  resize text.  Use the chart below to determine the correct percentage to
+  use, and only use values from the chart if possible.  Do not use
+  pixels (px), points (pt), ems (em), or any other unit.  Ems can be used
+  for margins and line heights.
+
+  Pixel  =  Percentage
+  --------------------
+   6px   =  46.2%
+   7px   =  53.8%
+   8px   =  61.5%
+   9px   =  69.2%
+  10px   =  77%
+  11px   =  85%
+  12px   =  93%
+  13px   =  100%
+  14px   =  108%
+  15px   =  116%
+  16px   =  123.1%
+  17px   =  131%
+  18px   =  138.5%
+  19px   =  146.5%
+  20px   =  153.9%
+  21px   =  161.6%
+  22px   =  167%
+  23px   =  174%
+  24px   =  182%
+  25px   =  189%
+  26px   =  197%
+*/
+
+html, body, #PageWrapper
+{
+	margin: 0;
+	padding: 0;
+	height: auto;
+	border: none;
+	text-align: center;
+}
+
+html
+{
+	overflow-y: scroll;
+}
+
+
+
+/*===========================================================================*\
+    _SECTION_GLOBAL_TAGS: Defines global styles after YUI reset applied
+\*===========================================================================*/
+
+h1{font-size:138.5%}
+h2{font-size:123.1%}
+h3{font-size:108%}
+h1,h2,h3,h4,h5,h6{color:#003366;margin:1em 0px;font-weight:bold}
+p{margin-top:0.75em}
+p:first-child{margin-top:0}
+a{text-decoration:underline}
+a:active,a:link,a:visited{color:#003366}
+strong{font-weight:bold}
+em{font-style:italic}
+ul,ol,dl{margin:1em 0 1em 3em}
+ol li,ul li{list-style-position:outside}
+ol li{list-style-type:decimal}
+ul li{list-style-type:disc}
+dl dd{margin-left:1em}
+th,caption{text-align:center}
+th{font-weight:bold}
+caption{margin-bottom:0.5em}
+textarea{font:normal 100% verdana}
+blockquote{margin:0px 18px;}
+/*
+*/
+
+
+
+/*===========================================================================*\
+    _SECTION_LINKS_BUTTONS: Defines classes for displaying links and buttons
+\*===========================================================================*/
+
+
+/*===========================================================================*\
+    _SECTION_SPRITES: Defines image information for CSS sprites
+\*===========================================================================*/
+
+/*
+  NOTE: all images that are NOT css sprites are defined in the .skin file!
+
+  ir (image replace) class: Use this class when you want to replace a tag's
+  text with an image.  This should be used for css sprites (see the tabs).
+
+  To use this class:
+
+  1. Create an additional class for the image itself, such as:
+       .search-btn { background-image: url(images/buttons/search_button.gif); width: 50px; height: 23px; }
+  2. Create a :hover pseudo-class that shifts the background position to the left by <width> pixels:
+       .search-btn:hover { background-position: -50px 0; }
+  2. Create html tags that reference the ir class and the image-specific class:
+       <asp:LinkButton CssClass="ir search-btn" PostBackUrl="~/Default.aspx" runat="server" />
+	   <asp:HyperLink CssClass="ir search-btn" NavigateUrl="~/Default.aspx" runat="server" />
+ 	   <a class="ir search-btn" href="Default.aspx" />
+
+  Source: http://www.evotech.net/blog/2007/09/css-image-replacement-method/
+*/
+/*
+.ir
+{
+	display: -moz-inline-box;
+	display: inline-block;
+	background: transparent none 0 0 no-repeat;
+	font: 0/0 Arial;
+	overflow: hidden;
+	color: rgba(255,255,255,0);
+	vertical-align: bottom; /\* needed for Firefox 2 *\/
+}
+*/
+
+/* Tabs (with CSS sprites) */
+/*
+a.tab1					{ background-image:url(images/tabs/welcome.gif);					width:68px;		height:22px; }
+a.tab1:hover			{ background-position: -68px 0; }
+a.tab2					{ background-image:url(images/tabs/search.gif);						width:55px;		height:22px; }
+a.tab2:hover			{ background-position: -55px 0; }
+a.tab3					{ background-image:url(images/tabs/order.gif);						width:50px;		height:22px; }
+a.tab3:hover			{ background-position: -50px 0; }
+a.tab4					{ background-image:url(images/tabs/creditxpert.gif);				width:81px;		height:22px; }
+a.tab4:hover			{ background-position: -81px 0; }
+a.tab5					{ background-image:url(images/tabs/custservice.gif);				width:110px;	height:22px; }
+a.tab5:hover			{ background-position: -110px 0; }
+a.tab6					{ background-image:url(images/tabs/myinfo.gif);						width:58px;		height:22px; }
+a.tab6:hover			{ background-position: -58px 0; }
+a.tab7					{ background-image:url(images/tabs/admin.gif);						width:96px;		height:22px; }
+a.tab7:hover			{ background-position: -96px 0; }
+a.tab8					{ background-image:url(images/tabs/payonline.gif);					width:75px;		height:22px; }
+a.tab8:hover			{ background-position: -75px 0; }
+*/
+
+
+/*===========================================================================*\
+    _SECTION_MASTER_PAGES: Defines classes for Master Pages.
+\*===========================================================================*/
+
+
+/*===========================================================================*\
+    _SECTION_CONTAINERS: Styles for Credco.eCredco.WebControls.Container controls
+\*===========================================================================*/
+
+/* SkinID="TestNotice" */
+.ctrSysMsg
+{
+	margin-bottom: 4px;	
+}
+.ctrtestnoticenopadding
+{
+	margin-bottom: 0px;	
+}
+.ctrSysMsg-hd, .ctrSysMsg-img
+{
+	background: url(images/gradient_gray.gif) repeat-x;
+	height: 21px;
+	padding: 0;
+	color: #ff0000;
+	font-weight: bold;
+	font-size: 131%;
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #b3c4d1;
+	border-left-width: 0;
+}
+.ctrSysMsg-hd:first-child, .ctrSysMsg-img:first-child
+{
+	border-left-width: 1px;
+	border-right-width: 0;
+}
+.ctrSysMsg-hd a
+{
+	color: #ff0000;
+}
+.ctrSysMsg-cnt, .ctrSysMsg-cntnopadding
+{
+	background-color: #f6f6f6;
+	text-align: center;
+	padding: 4px;
+}
+.ctrSysMsg-cntnopadding
+{
+	padding: 0px;
+}
+
+/* SkinID="Skin1" */
+.ctr1
+{
+	width: 100%;
+	margin-bottom: 4px;	
+}
+.ctr1nopadding
+{
+	margin-bottom: 0px;	
+}
+.ctr1-hrow
+{
+	background: url(images/gradient_blue.png) repeat-x;
+	height: 25px;
+	border: 1px solid #b3c4d1;
+	border: 1px solid magenta;
+}
+.ctr1-icell
+{
+	padding: 4px;
+	vertical-align: middle;
+	text-align: center;
+}
+.ctr1-hcell
+{
+	padding: 4px;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 100%;
+	vertical-align: middle;
+	text-align: left;
+}
+.ctr1-hcell a
+{
+	color: #ffffff;
+}
+.ctr1-crow
+{
+	background-color: #efefef;
+	border: 1px solid #b3c4d1;
+	border: 1px solid magenta;
+}
+.ctr1-ccell, .ctr1-ccellnopadding
+{
+	text-align: left;
+}
+.ctr1-ccell
+{
+	padding: 4px;
+}
+.ctr1-ccellnopadding
+{
+	padding: 0px;
+}
+
+/* SkinID="Skin2" */
+.ctr2
+{
+	margin-bottom: 4px;
+	vertical-align: top;
+}
+.ctr2-hd, .ctr2-img
+{
+	font-weight: bold;
+	font-size: 85%;
+	margin: 4px;
+	color: #303030;
+}
+.ctr2-cnt
+{
+	border: 1px solid #909090;
+	background-color: #feffff;
+	padding: 4px;
+}
+
+/* SkinID="Skin3" */
+.ctr3
+{
+	margin-bottom: 4px;	
+}
+.ctr3-hd, .ctr3-img
+{
+	background-color: #9c9c9c;
+	padding: 4px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 100%;
+}
+.ctr3-hd a, .ctr3-hd a:link, .ctr3-hd a:visited, .ctr3-hd a:active  
+{
+	color: #fff;
+}
+.ctr3-cnt
+{
+	background-color: #e9e9e9;
+	padding: 4px;
+}
+
+/* SkinID="MultiViewContainer" */
+.ctrMultiView
+{
+	margin: 0px;
+	padding: 0px;
+}
+.ctrMultiView-hd
+{
+	color: #ffffff;
+	height: 21px;
+	margin: 0px;
+	padding: 0px;
+}
+.ctrMultiView-cnt
+{
+	background-color: #ffffff;
+	border-top: solid 1px #feffff;
+	padding: 0px;
+}
+
+/* SkinID="Stacked" */
+.ctrStacked
+{
+	margin: 10px 0 0 10px;
+}
+.ctrStacked-hd, .ctrStacked-img
+{
+	background: url(images/gradient_blue.png) repeat-x;
+	padding: 4px;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 100%;
+	vertical-align: middle;
+	border: 1px solid #b3c4d1;
+	border-left-width: 0;
+}
+.ctrStacked-hd:first-child, .ctrStacked-img:first-child
+{
+	border-left-width: 1px;
+	border-right-width: 0;
+}
+.ctrStacked-hd a
+{
+	color: #ffffff;
+}
+.ctrStacked-cnt, .ctrStacked-cntnopad
+{
+	background-color: #efefef;
+	padding: 4px;
+}
+.ctrStacked-cntnopad
+{
+	padding: 0px;
+}
+
+
+
+/*===========================================================================*\
+    _SECTION_TABS: Defines the structure and appearance multiview & wizard tabs
+\*===========================================================================*/
+
+
+
+/*===========================================================================*\
+    _SECTION_MODAL_POPUP_DIALOGS: Styles for modal popup windows
+\*===========================================================================*/
+
+/* SkinID="Dialog1" */
+.dialog1
+{
+	border: 1px solid #b3c4d1;
+}
+.dialog1-hd
+{
+	background: url(images/gradient_blue.png) repeat-x;
+	padding: 4px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 100%;
+}
+.dialog1-cnt
+{
+	background-color: #efefef;
+	border-top: solid 1px #feffff;
+}
+.dialog1-cnt td
+{
+	padding: 6px;
+}
+.dialog1-ft
+{
+	background-color: #efefef;
+	text-align: center;
+	margin-bottom: 8px;
+	padding-bottom: 8px;
+}
+
+
+/*===========================================================================*\
+    _SECTION_GRIDS_TABLES: Styles for GridViews and tables
+\*===========================================================================*/
+
+/* SkinID="Grid1" */
+.grid1
+{
+	clear: both;
+	border: 1px solid #999;
+	margin-bottom: 4px;
+}
+.grid1-hd
+{
+	background-image: url(images/grid/hdr_blue_gradient.png);
+	color: #fff;
+	font-weight: bold;
+	font-size: 93%;
+}
+.grid1-hd th
+{
+	padding: 3px;
+	border-color: #fff; /* Overrides default YUI black border */
+}
+.grid1-hd th a, .grid1-hd th a:link, .grid1-hd th a:visited, .grid1-hd th a:active  
+{
+	color: #fff; /* Ensure links in column headers (i.e. sorting link) are white */
+}
+.grid1-row, .grid1-alt-row
+{
+	color: #444;
+	background-color: #fff;
+	font-size: 85%;
+	font-weight: bold;
+	border-bottom-style: dashed;  /* These three properties are required */
+	border-bottom-color: #c2ccd5; /* (and must be listed separately) */
+	border-bottom-width: 1px;     /* for Firefox */
+	border-top-style: dashed;
+	border-top-color: #c2ccd5;
+	border-top-width: 1px;
+	border-left: solid 1px #999;
+	/*cursor: hand;
+	cursor: pointer;*/
+}
+.grid1-alt-row
+{
+	background-image: url(images/grid/alt_row_bg_gradient.jpg);
+}
+.grid1-row td, .grid1-alt-row td
+{
+	border-bottom: dashed 1px #c2ccd5; /* This property is required for IE */
+	border-left-style: hidden;
+	border-left-width: 0px;
+	border-right-style: hidden;
+	border-right-width: 0px;
+	padding: 3px;
+	text-align: left;
+	vertical-align: middle;
+	height: 20px;
+}
+.grid1 tr.sel /* selected */
+{
+	background-image: none;
+	background-color: #3E6891;
+	color: #fff;
+}
+.grid1 tr.mo /* mouseover */
+{
+	background-image: none;
+	background-color: #6f8eac;
+	color: #fff;
+	cursor: hand;
+	cursor: pointer;
+}
+.grid1 tr.empty-data td
+{
+	color: #666;
+	padding: 3px;
+	font-style: italic;
+}
+
+/* SkinID="Grid2" */
+.grid2
+{
+	width: 99%; /* Prevents scrollbars in Firefox */
+}
+.grid2 tr
+{
+	width: 100%;
+	cursor: hand;
+	cursor: pointer;
+}
+.grid2 tr.sel /* selected */
+{
+	background-color: #fcf3ca;
+	font-weight: bold;
+	cursor: hand;
+	cursor: pointer;
+	color: #333;
+}
+.grid2 tr.mo /* mouseover */
+{
+	background-color: #d9e8f7;
+}
+.grid2 tr td
+{
+	padding: 6px;
+	color: #666;
+}
+
+/* SkinID="Grid3" */
+.grid3
+{
+	width: 100%;
+}
+.grid3 tr
+{
+	vertical-align: top;
+	font-weight: bold;
+	font-size: 77%;
+}
+.grid3 tr.mo /* mouseover */
+{
+	background-color: #fff;
+	cursor: hand;
+	cursor: pointer;
+}
+.grid3 td
+{
+	color: #444;
+	padding: 3px 0;
+}
+.grid3 td.dim /* dimmed version (usually a lighter shade of the same color) */
+{
+	color: #777;
+}
+
+
+/* Table: Full width, no padding */
+table.FullNoPad
+{
+	height: 100%;
+	width: 100%;
+}
+
+tr.FullNoPad
+{
+	vertical-align: top;
+}
+
+td.FullNoPad
+{
+	color: #444;
+	font-size: 100%;
+	font-weight: normal;
+	padding: 0;
+}
+
+td.FullNoPad.dim /* dimmed version (usually a lighter shade of the same color) */
+{
+	color: #777;
+}
+
+
+/* Table 1 */
+table.tbl1
+{
+	height: 100%;
+	width: 100%;
+}
+
+tr.tbl1
+{
+	vertical-align: top;
+}
+
+td.tbl1
+{
+	color: #444;
+	font-size: 100%;
+	font-weight: normal;
+	padding: 3px 3px;
+}
+
+td.tbl1.dim /* dimmed version (usually a lighter shade of the same color) */
+{
+	color: #777;
+}
+
+
+.Label
+{
+	font-size: 100%;
+}
+
+.SubLabel
+{
+	font-size: 66%;
+}
+
+
+/* CheckBoxList 1 */
+.CheckBoxList1
+{
+	width: 100%;
+}
+
+.CheckBoxList1 tr
+{
+	vertical-align: top;
+}
+
+.CheckBoxList1 td
+{
+	color: #444;
+	font-size: 100%;
+	font-weight: normal;
+	padding: 3px 3px;
+}
+
+.CheckBoxList1 td.dim /* dimmed version (usually a lighter shade of the same color) */
+{
+	color: #777;
+}
+
+
+/* RadioList 1 */
+.RadioList1
+{
+	width: 100%;
+}
+
+.RadioList1 tr
+{
+	vertical-align: top;
+}
+
+.RadioList1 td
+{
+	color: #444;
+	font-size: 100%;
+	font-weight: normal;
+	padding: 3px 3px;
+}
+
+.RadioList1 td.dim /* dimmed version (usually a lighter shade of the same color) */
+{
+	color: #777;
+}
+
+/* Default styles for ASP.NET controls */
+.CheckBox input[type=checkbox], .CheckBoxList1 input[type=checkbox], .RadioButton input[type=radio], .RadioList1 input[type=radio]
+{
+	margin-right: 5px;
+}
+
+
+
+/*===========================================================================*\
+    _SECTION_FORMS: Styles for table-based forms
+\*===========================================================================*/
+
+
+
+/*===========================================================================*\
+    _SECTION_LISTS: Styles for HTML lists (<ul> and <ol>)
+\*===========================================================================*/
+
+div.val-summary ul
+{
+	margin: 0.5em 0 0.5em 1.5em;
+}
+div.val-summary ul li
+{
+	color: #ff0000;
+	font-weight: normal;
+	font-size: 93%;
+	list-style-position: outside;
+	list-style-type: disc;
+}
+
+
+/*===========================================================================*\
+    _SECTION_TEXT: Defines classes for displaying various text types
+\*===========================================================================*/
+
+.info-text
+{
+	color: #003366;
+	font-weight: bold;
+	font-size: 93%;
+}
+
+.error-text
+{
+	color: #ff0000;
+	font-weight: bold;
+	font-size: 93%;
+}
+
+.warning-text
+{
+	/*color: #DF7000;
+	font-weight: bold;
+	font-size: 93%;*/
+	color: #ff0000;
+	font-weight: normal;
+	font-size: 100%;
+}
+
+.success-text
+{
+	color: #009900;
+	font-weight: bold;
+	font-size: 93%;
+}
+
+.help-text
+{
+	color: #444444;
+	font-weight: bold;
+	font-size: 85%;
+}
+
+
+/*===========================================================================*\
+    _SECTION_HELPERS: Shortcuts to commonly used styles
+\*===========================================================================*/
+
+.full, .fullheight {height:100%;}
+.full, .fullwidth {width:100%;}
+.bold {font-weight:bold;}
+.float-left {float:left;}
+.float-right {float:right;}
+.float-none {float:none;}
+.clear-left {clear:left;}
+.clear-right {clear:right;}
+.clear-both {clear:both;}
+.display-none {display:none;}
+.display-block {display:block;}
+.display-inline {display:inline;}
+.display-inline-block {display:inline-block;}
+.align-left {text-align:left;}
+.align-center {text-align:center;}
+.align-right {text-align:right;}
+.valign-top {vertical-align:top;}
+.valign-middle {vertical-align:middle;}
+.valign-bottom {vertical-align:bottom;}
+.border-none {border: solid 0px #fff;}
+.nowrap {white-space:nowrap;}
+.ellipsis {overflow:hidden;text-overflow:ellipsis;}
+
+table.fixed {table-layout:fixed;}
+
+.nomrg {margin:0;}
+.nomrgtop {margin-top:0;}
+.nomrgbottom {margin-bottom:0;}
+.nomrgright {margin-right:0;}
+.nomrgleft {margin-left:0;}
+
+.nopad {padding:0;}
+.nopadtop {padding-top:0;}
+.nopadbottom {padding-bottom:0;}
+.nopadright {padding-right:0;}
+.nopadleft {padding-left:0;}
+
+.pt5 {padding-top:5px;}
+.pb5 {padding-bottom:5px;}
+.pr5 {padding-right:5px;}
+.pl5 {padding-left:5px;}
+
+.border-test-blue{border: 1px solid blue;}
+.border-test-cyan{border: 1px solid cyan;}
+.border-test-green{border: 1px solid green;}
+.border-test-lime{border: 1px solid lime;}
+.border-test-magenta{border: 1px solid magenta;}
+.border-test-orange{border: 1px solid orange;}
+.border-test-red{border: 1px solid red;}
+.border-test-yellow{border: 1px solid yellow;}
